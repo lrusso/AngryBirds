@@ -164,6 +164,8 @@ AngryBirds.Game = function (game)
 	this.scoreLabel = null;
 	this.scoreValue = null;
 	this.gameWon = null;
+	this.startX = null;
+	this.swipeCheckingEnabled = null;
 
 	// SCALING THE CANVAS SIZE FOR THE GAME
 	function resizeF()
@@ -215,10 +217,15 @@ AngryBirds.Game.prototype = {
 		this.scoreLabel = null;
 		this.scoreValue = 0;
 		this.gameWon = false;
+		this.startX = 0;
+		this.swipeCheckingEnabled = false;
 		},
 
 	create: function()
 		{
+		// SETTING THE WORLD BOUNDS
+		game.world.setBounds(0, 0, game.width * 2, game.height);
+
 		// STARTING THE PHYSICS SYSTEM
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 
@@ -231,9 +238,7 @@ AngryBirds.Game.prototype = {
 		this.birdsCollisionGroup = this.game.physics.p2.createCollisionGroup();
 
 		// ADDING THE BACKGROUND
-		this.backgroundImage = this.add.sprite(0, 0, "imageGameBackground");
-		this.backgroundImage.width = this.game.width;
-		this.backgroundImage.height = this.game.height;
+		this.backgroundImage = this.add.tileSprite(0, 0, this.game.world.width * 2, this.game.world.height, "imageGameBackground");
 
 		// CREATING THE BIRDS GROUP
 		this.birds = this.add.group();
@@ -249,17 +254,17 @@ AngryBirds.Game.prototype = {
 		this.blocks.physicsBodyType = Phaser.Physics.P2JS;
 
 		// ADDING THE FLOOR
-		this.floor = this.add.tileSprite(this.game.world.width / 2, this.game.world.height - 24, this.game.world.width, 48, "imageGameFloor");
+		this.floor = this.add.tileSprite(this.game.world.width / 2, this.game.world.height - 24, this.game.world.width * 2, 48, "imageGameFloor");
 		this.blocks.add(this.floor);
 		this.floor.body.setCollisionGroup(this.blocksCollisionGroup);
 		this.floor.body.collides([this.blocksCollisionGroup, this.enemiesCollisionGroup, this.birdsCollisionGroup]);
 		this.floor.body.static = true;
 
 		// ADDING THE FLOOR GRASS BACK LAYER
-		this.floorGrassBack = this.add.tileSprite(-3, this.game.world.height - 65, this.game.world.width, this.game.world.height - 411, "imageGameGrassBack");
+		this.floorGrassBack = this.add.tileSprite(-3, this.game.world.height - 65, this.game.world.width * 2, this.game.world.height - 411, "imageGameGrassBack");
 
 		// ADDING THE FLOOR GRASS FRONT FRONT
-		this.floorGrassFront = this.add.tileSprite(-3, this.game.world.height - 60, this.game.world.width, this.game.world.height - 420, "imageGameGrassFront");
+		this.floorGrassFront = this.add.tileSprite(-3, this.game.world.height - 60, this.game.world.width * 2, this.game.world.height - 420, "imageGameGrassFront");
 
 		// ADDING THE POLE
 		this.pole = this.add.sprite(180, 300, "imageGamePole");
@@ -276,6 +281,7 @@ AngryBirds.Game.prototype = {
 		this.scoreLabel = game.add.bitmapText(10, 5, "AngryBirdsFont", STRING_SCORE + " " + this.addingZeros(this.scoreValue,4), 30);
 		this.scoreLabel.height = 34;
 		this.scoreLabel.position.x = game.width - this.scoreLabel.width - 10;
+		this.scoreLabel.fixedToCamera = true;
 
 		// PREPARING THE SHOT WHEN THE USER CLICKS OR TAPS ON THE SCREEN
 		this.game.input.onDown.add(function()
@@ -286,6 +292,23 @@ AngryBirds.Game.prototype = {
 				// SETTING THAT THE USER IS PREPARING THE SHOT
 				this.isPreparingShot = true;
 				}
+
+			// CHECKING IF THE SWIPE CHECKING ISN'T ENABLED
+			if (this.swipeCheckingEnabled==false)
+				{
+				// GETTING THE FIRST FINGER/MOUSE POSITION
+				this.startX = this.game.input.activePointer.position.x;
+
+				// SETTING THAT THE SWIPE CHECKING IS ENABLED
+				this.swipeCheckingEnabled = true;
+				}
+			}, this);
+
+		// SETTING THAT WILL HAPPEN WHEN THE USER STOPS TOUCHING THE SCREEN OR MOUSE UP
+		this.game.input.onUp.add(function()
+			{
+			// SETTING THAT THE SWIPE CHECKING IS DISABLED
+			this.swipeCheckingEnabled = false;
 			}, this);
 
 		// LOADING THE LEVEL INFO
@@ -297,8 +320,44 @@ AngryBirds.Game.prototype = {
 
 	update: function()
 		{
-		// CHECKING IF THE USER IS PREPARING THE SHOT
-		if (this.isPreparingShot==true)
+		// CHECKING IF THE WORLD CAMERA CAN BE MOVED
+		if (this.input.activePointer.isDown==true && this.isPreparingShot==false)
+			{
+			// GETTING THE CURRENT FINGER/MOUSE X POSITION
+			var endX = this.game.input.activePointer.position.x;
+
+			// GETTING THE DISTANCE
+			var distX = this.startX-endX;
+
+			// CHECKING IF THERE WAS A LEFT SWIPE
+			if(distX>10)
+				{
+				// SETTING THAT THE SWIPE CHECKING IS DISABLED
+				this.swipeCheckingEnabled = false;
+
+				// UPDATING THE FIRST FINGER/MOUSE POSITION
+				this.startX = endX;
+
+				// MOVING THE WORLD CAMERA TO THE LEFT
+				game.camera.x = game.camera.x + 10;
+				}
+
+			// CHECKING IF THERE WAS A RIGHT SWIPE
+			else if (distX<-10)
+				{
+				// SETTING THAT THE SWIPE CHECKING IS DISABLED
+				this.swipeCheckingEnabled = false;
+
+				// UPDATING THE FIRST FINGER/MOUSE POSITION
+				this.startX = endX;
+
+				// MOVING THE WORLD CAMERA TO THE RIGHT
+				game.camera.x = game.camera.x - 10;
+				}
+			}
+
+		// CHECKING IF THE USER IS PREPARING THE SHOT AND THAT THE BIRD WAS NOT THROWN YET
+		if (this.isPreparingShot==true && this.bird.body==null)
 			{
 			// MAKING THE BIRD FOLLOW USER INPUT POINTER
 			this.bird.x = this.game.input.activePointer.position.x;
@@ -311,18 +370,18 @@ AngryBirds.Game.prototype = {
 				this.poleLine1.destroy();
 				}
 
-			// DRAWING THE FIRST LINE FOR THE POLE
-			this.poleLine1 = game.add.graphics(0, 0);
-			this.poleLine1.lineStyle(6, 0x301708);
-			this.poleLine1.moveTo(this.pole.position.x - 10,this.pole.position.y + 9);
-			this.poleLine1.lineTo(this.game.input.activePointer.position.x - this.bird.width / 2 + 7, this.game.input.activePointer.position.y + 9);
-
 			// CHECKING IF THE SECOND LINE FOR THE POLE EXISTS
 			if (this.poleLine2!=null)
 				{
 				// DESTROYING THE SECOND LINE FOR THE POLE
 				this.poleLine2.destroy();
 				}
+
+			// DRAWING THE FIRST LINE FOR THE POLE
+			this.poleLine1 = game.add.graphics(0, 0);
+			this.poleLine1.lineStyle(6, 0x301708);
+			this.poleLine1.moveTo(this.pole.position.x - 10,this.pole.position.y + 9);
+			this.poleLine1.lineTo(this.game.input.activePointer.position.x - this.bird.width / 2 + 7, this.game.input.activePointer.position.y + 9);
 
 			// DRAWING THE SECOND LINE FOR THE POLE
 			this.poleLine2 = game.add.graphics(0, 0);
@@ -539,12 +598,12 @@ AngryBirds.Game.prototype = {
 
 	endTurn: function()
 		{
-		// UPDATING THE AVAILABLE BIRDS COUNTER
-		this.availableBirdsCounter = this.availableBirdsCounter - 1;
-
 		// WAITING 3 SECONDS
 		this.game.time.events.add(3 * Phaser.Timer.SECOND, function()
 			{
+			// UPDATING THE AVAILABLE BIRDS COUNTER
+			this.availableBirdsCounter = this.availableBirdsCounter - 1;
+
 			// KILLING THE BIRD
 			this.bird.kill()
 
