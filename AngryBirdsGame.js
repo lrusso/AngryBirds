@@ -267,7 +267,7 @@ AngryBirds.Game.prototype = {
 		this.floor.body.static = true;
 
 		// ADDING THE FLOOR GRASS BACK LAYER
-		this.floorGrassBack = this.add.tileSprite(-3, this.game.world.height - 65, this.game.world.width * 2, this.game.world.height - 411, "imageGameGrassBack");
+		this.floorGrassBack = this.add.tileSprite(-3, this.game.world.height - 65, this.game.world.width * 2, this.game.world.height - 418, "imageGameGrassBack");
 
 		// ADDING THE FLOOR GRASS FRONT FRONT
 		this.floorGrassFront = this.add.tileSprite(-3, this.game.world.height - 60, this.game.world.width * 2, this.game.world.height - 420, "imageGameGrassFront");
