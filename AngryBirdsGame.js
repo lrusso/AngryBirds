@@ -47,13 +47,13 @@ if (userLanguage.substring(0,2)=="es")
 	STRING_SCORE = "SCORE:";
 	STRING_YOUWIN = "You win!";
 	STRING_YOULOSE = "You lose!"
-	STRING_DISCLAIMER1 = "Disclaimer";
+	STRING_DISCLAIMER1 = "DISCLAIMER";
 	STRING_DISCLAIMER2 = "The Angry Birds resources";
 	STRING_DISCLAIMER3 = "(images, fonts, music and sounds)";
-	STRING_DISCLAIMER4 = "are provided for educational purposes ONLY";
+	STRING_DISCLAIMER4 = "are provided for educational purposes ONLY.";
 	STRING_DISCLAIMER5 = "This demo is not affiliated with";
-	STRING_DISCLAIMER6 = "or endorsed by their respective.";
-	STRING_DISCLAIMER7 = "copyright holders";
+	STRING_DISCLAIMER6 = "or endorsed by their respective";
+	STRING_DISCLAIMER7 = "copyright holders.";
 	STRING_DISCLAIMER8_DESKTOP = "Click to continue";
 	STRING_DISCLAIMER8_MOBILE = "Tap to continue";
 	}
