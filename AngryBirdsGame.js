@@ -654,11 +654,11 @@ AngryBirds.Game.prototype = {
 			// UPDATING THE AVAILABLE BIRDS COUNTER
 			this.availableBirdsCounter = this.availableBirdsCounter - 1;
 
-			// KILLING THE BIRD
-			this.bird.kill();
-
 			// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
 			game.camera.follow(null);
+
+			// KILLING THE BIRD
+			this.bird.kill();
 
 			// SHOWING A NEW BIRD 1 SECOND LATER
 			this.game.time.events.add(Phaser.Timer.SECOND, function()
