@@ -1,6 +1,6 @@
-# Angry Birds
+# Angry Birds clone
 
-Angry Birds game in JavaScript.
+Angry Birds clone game in JavaScript.
 
 ![alt screenshot](https://raw.githubusercontent.com/lrusso/AngryBirds/master/AngryBirds.png)
 
