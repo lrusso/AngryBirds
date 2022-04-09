@@ -158,6 +158,8 @@ AngryBirds.Game = function (game)
 	this.pole = null;
 	this.poleLeft = null;
 	this.poleRight = null;
+	this.poleLine1 = null;
+	this.poleLine2 = null;
 	this.bird = null;
 	this.scoreLabel = null;
 	this.scoreValue = null;
@@ -207,6 +209,8 @@ AngryBirds.Game.prototype = {
 		this.pole = null;
 		this.poleLeft = null;
 		this.poleRight = null;
+		this.poleLine1 = null;
+		this.poleLine2 = null;
 		this.bird = null;
 		this.scoreLabel = null;
 		this.scoreValue = 0;
@@ -261,12 +265,12 @@ AngryBirds.Game.prototype = {
 		this.pole = this.add.sprite(180, 300, "imageGamePole");
 		this.pole.anchor.setTo(0.5, 0);
 		this.pole.alpha = 0;
-		this.poleRight = this.add.sprite(180, 286, "imageGamePoleRight");
-		this.poleRight.width = this.poleRight.width * 0.55;
-		this.poleRight.height = this.poleRight.height * 0.55;
-		this.poleLeft = this.add.sprite(165, 283, "imageGamePoleLeft");
-		this.poleLeft.width = this.poleLeft.width * 0.55;
-		this.poleLeft.height = this.poleLeft.height * 0.55;
+		this.poleRight = this.add.sprite(180, 294, "imageGamePoleRight");
+		this.poleRight.width = this.poleRight.width * 0.5;
+		this.poleRight.height = this.poleRight.height * 0.5;
+		this.poleLeft = this.add.sprite(166, 291, "imageGamePoleLeft");
+		this.poleLeft.width = this.poleLeft.width * 0.5;
+		this.poleLeft.height = this.poleLeft.height * 0.5;
 
 		// ADDING THE SCORE TEXT
 		this.scoreLabel = game.add.bitmapText(10, 5, "AngryBirdsFont", STRING_SCORE + " " + this.addingZeros(this.scoreValue,4), 30);
@@ -317,6 +321,35 @@ AngryBirds.Game.prototype = {
 			// MAKING THE BIRD FOLLOW USER INPUT POINTER
 			this.bird.x = this.game.input.activePointer.position.x;
 			this.bird.y = this.game.input.activePointer.position.y;
+
+			// CHECKING IF THE FIRST LINE FOR THE POLE EXISTS
+			if (this.poleLine1!=null)
+				{
+				// DESTROYING THE FIRST LINE FOR THE POLE
+				this.poleLine1.destroy();
+				}
+
+			// DRAWING THE FIRST LINE FOR THE POLE
+			this.poleLine1 = game.add.graphics(0, 0);
+			this.poleLine1.lineStyle(6, 0x301708);
+			this.poleLine1.moveTo(this.pole.position.x - 10,this.pole.position.y + 9);
+			this.poleLine1.lineTo(this.game.input.activePointer.position.x - this.bird.width / 2 + 7, this.game.input.activePointer.position.y + 9);
+
+			// CHECKING IF THE SECOND LINE FOR THE POLE EXISTS
+			if (this.poleLine2!=null)
+				{
+				// DESTROYING THE SECOND LINE FOR THE POLE
+				this.poleLine2.destroy();
+				}
+
+			// DRAWING THE SECOND LINE FOR THE POLE
+			this.poleLine2 = game.add.graphics(0, 0);
+			this.poleLine2.lineStyle(6, 0x301708);
+			this.poleLine2.moveTo(this.pole.position.x + 15,this.pole.position.y + 9);
+			this.poleLine2.lineTo(this.game.input.activePointer.position.x - this.bird.width / 2 + 7, this.game.input.activePointer.position.y + 9);
+
+			// BRINGING THE LEFT SIDE OF THE POLE TO THE FRONT
+			this.game.world.bringToTop(this.poleLeft);
 
 			// GETTING THE DISTANCE BETWEEN THE BIRD AND THE POLE
 			var distance = Phaser.Point.distance(this.bird.position, this.pole.position);
@@ -433,6 +466,20 @@ AngryBirds.Game.prototype = {
 
 	throwBird: function()
 		{
+		// CHECKING IF THE FIRST LINE FOR THE POLE EXISTS
+		if (this.poleLine1!=null)
+			{
+			// DESTROYING THE FIRST LINE FOR THE POLE
+			this.poleLine1.destroy();
+			}
+
+		// CHECKING IF THE SECOND LINE FOR THE POLE EXISTS
+		if (this.poleLine2!=null)
+			{
+			// DESTROYING THE SECOND LINE FOR THE POLE
+			this.poleLine2.destroy();
+			}
+
 		// ENABLING PHYSICS TO THE BIRD
 		this.game.physics.p2.enable(this.bird);
 
