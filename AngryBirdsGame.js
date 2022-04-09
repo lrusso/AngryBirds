@@ -39,8 +39,8 @@ AngryBirds.Preloader.prototype = {
 		// SETTING THE MAXPOINTERS VALUE
 		this.input.maxPointers = 1;
 
-		// SETTING THE ROUNDPIXELS PROPERTY TO TRUE (IMPORTANT, DO NOT MODIFY)
-		this.game.renderer.renderSession.roundPixels = true;
+		// SETTING THE ROUNDPIXELS PROPERTY TO FALSE (IMPORTANT, DO NOT MODIFY)
+		this.game.renderer.renderSession.roundPixels = false;
 
 		// SCALING THE CANVAS SIZE FOR THE GAME
 		var scaleX = window.innerWidth / 782;
@@ -197,7 +197,7 @@ AngryBirds.Game.prototype = {
 		this.MAX_DISTANCE_SHOOT = 200;
 		this.MAX_SPEED_SHOOT = 1000;
 		this.SHOOT_FACTOR = 8;
-		this.KILL_DIFF = 10;
+		this.KILL_DIFF = 8;
 		this.backgroundImage = null;
 		this.blocksCollisionGroup = null;
 		this.enemiesCollisionGroup = null;
@@ -237,6 +237,10 @@ AngryBirds.Game.prototype = {
 
 		// SETTING THE GRAVITY
 		this.game.physics.p2.gravity.y = 300;
+
+		// PREVENTING MINIMAL FRICTIONS AND MINIMAL MOVEMENTS BETWEEN BLOCKS
+		this.game.physics.p2.world.defaultContactMaterial.friction = 0.3;
+		this.game.physics.p2.world.setGlobalStiffness(100000);
 
 		// SETTING THE COLLISION GROUPS
 		this.blocksCollisionGroup = this.game.physics.p2.createCollisionGroup();
