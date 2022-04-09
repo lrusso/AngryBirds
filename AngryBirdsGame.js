@@ -32,7 +32,7 @@ if (userLanguage.substring(0,2)=="es")
 	STRING_SCORE = "PUNTAJE:";
 	STRING_YOUWIN = String.fromCharCode(161) + "Has ganado!";
 	STRING_YOULOSE = String.fromCharCode(161) + "Has perdido!";
-	STRING_DISCLAIMER1 = "AVISO LEGAL";
+	STRING_DISCLAIMER1 = "DESCARGO DE RESPONSABILIDAD";
 	STRING_DISCLAIMER2 = "Los recursos de Angry Birds";
 	STRING_DISCLAIMER3 = "(im" + String.fromCharCode(225) + "genes, fuentes, m" + String.fromCharCode(250) + "sica y sonidos)";
 	STRING_DISCLAIMER4 = "se proporcionan UNICAMENTE con fines";
