@@ -493,8 +493,12 @@ AngryBirds.Game.prototype = {
 				// CHECKING IF THERE ARE BIRDS AVIABLE
 				if (this.availableBirdsCounter > 0)
 					{
-					// ADDING A BIRD
-					this.addBird();
+					// CHECKING IF THE USER DIDN'T WIN THE GAME
+					if (this.gameWon==false)
+						{
+						// ADDING A BIRD
+						this.addBird();
+						}
 					}
 				else
 					{
