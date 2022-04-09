@@ -86,7 +86,7 @@ AngryBirds.Preloader.prototype = {
 		this.load.spritesheet("imageGameExplosion", imageGameExplosion, 48, 48, 5, 1, 2);
 
 		// ALL THE LEVELS THAT ARE GOING TO BE USED ARE STORED IN JSON FORMAT
-		var level1 = {"blocks":[{"x":400,"y":368,"asset":"imageGameBoxHeavy","mass":8},{"x":400,"y":320,"asset":"imageGameBoxHeavy","mass":8},{"x":400,"y":272,"asset":"imageGameBoxHeavy","mass":8},{"x":500,"y":368,"asset":"imageGameBoxLight","mass":3},{"x":500,"y":320,"asset":"imageGameBoxLight","mass":3},{"x":500,"y":272,"asset":"imageGameBoxLight","mass":3},{"x":500,"y":224,"asset":"imageGameBoxLight","mass":3},{"x":580,"y":368,"asset":"imageGameBoxLight","mass":3},{"x":580,"y":320,"asset":"imageGameBoxLight","mass":3},{"x":580,"y":272,"asset":"imageGameBoxLight","mass":3},{"x":580,"y":224,"asset":"imageGameBoxLight","mass":3},{"x":730,"y":368,"asset":"imageGameBoxLight","mass":3},{"x":730,"y":320,"asset":"imageGameBoxLight","mass":3},{"x":730,"y":272,"asset":"imageGameBoxLight","mass":3},{"x":730,"y":224,"asset":"imageGameBoxLight","mass":3},{"x":730,"y":176,"asset":"imageGameBoxLight","mass":3}],"enemies":[{"x":500,"y":176,"asset":"imageGamePig"},{"x":580,"y":176,"asset":"imageGamePig"},{"x":730,"y":128,"asset":"imageGamePig"}]};
+		var level1 = {"blocks":[{"x":400,"y":368,"asset":"imageGameBoxHeavy","mass":12},{"x":400,"y":320,"asset":"imageGameBoxHeavy","mass":12},{"x":400,"y":272,"asset":"imageGameBoxHeavy","mass":12},{"x":500,"y":368,"asset":"imageGameBoxLight","mass":5},{"x":500,"y":320,"asset":"imageGameBoxLight","mass":5},{"x":500,"y":272,"asset":"imageGameBoxLight","mass":5},{"x":500,"y":224,"asset":"imageGameBoxLight","mass":5},{"x":580,"y":368,"asset":"imageGameBoxLight","mass":5},{"x":580,"y":320,"asset":"imageGameBoxLight","mass":5},{"x":580,"y":272,"asset":"imageGameBoxLight","mass":5},{"x":580,"y":224,"asset":"imageGameBoxLight","mass":5},{"x":730,"y":368,"asset":"imageGameBoxLight","mass":5},{"x":730,"y":320,"asset":"imageGameBoxLight","mass":5},{"x":730,"y":272,"asset":"imageGameBoxLight","mass":5},{"x":730,"y":224,"asset":"imageGameBoxLight","mass":5},{"x":730,"y":176,"asset":"imageGameBoxLight","mass":5}],"enemies":[{"x":500,"y":176,"asset":"imageGamePig"},{"x":580,"y":176,"asset":"imageGamePig"},{"x":730,"y":128,"asset":"imageGamePig"}]};
 
 		// LOADING THE LEVELS
 		this.load.text("level1", "data:application/json;base64," + btoa(JSON.stringify(level1)));
@@ -196,7 +196,7 @@ AngryBirds.Game.prototype = {
 		this.currentLevel = "level1";
 		this.MAX_DISTANCE_SHOOT = 200;
 		this.MAX_SPEED_SHOOT = 1000;
-		this.SHOOT_FACTOR = 12;
+		this.SHOOT_FACTOR = 8;
 		this.KILL_DIFF = 10;
 		this.backgroundImage = null;
 		this.blocksCollisionGroup = null;
@@ -236,7 +236,7 @@ AngryBirds.Game.prototype = {
 		this.game.physics.startSystem(Phaser.Physics.P2JS);
 
 		// SETTING THE GRAVITY
-		this.game.physics.p2.gravity.y = 1000;
+		this.game.physics.p2.gravity.y = 300;
 
 		// SETTING THE COLLISION GROUPS
 		this.blocksCollisionGroup = this.game.physics.p2.createCollisionGroup();
@@ -610,8 +610,8 @@ AngryBirds.Game.prototype = {
 		var diff = Phaser.Point.subtract(this.pole.position, this.bird.position);
 
 		// SETTING THE BIRD VELOCITY ACCORDING THE DIFFERENCE VECTOR
-		this.bird.body.velocity.x = Math.abs(diff.x * this.SHOOT_FACTOR)/(diff.x * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.x * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT) - 30;
-		this.bird.body.velocity.y = Math.abs(diff.y * this.SHOOT_FACTOR)/(diff.y * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.y * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT) - 30;
+		this.bird.body.velocity.x = Math.abs(diff.x * this.SHOOT_FACTOR)/(diff.x * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.x * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT);
+		this.bird.body.velocity.y = Math.abs(diff.y * this.SHOOT_FACTOR)/(diff.y * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.y * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT);
 
 		// MAKING THE CAMERA TO FOLLOW THE BIRD
 		game.camera.follow(this.bird);
