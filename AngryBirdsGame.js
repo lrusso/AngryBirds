@@ -658,20 +658,20 @@ AngryBirds.Game.prototype = {
 			game.camera.follow(null);
 
 			// HIDING THE EXPLOSION SPRITE
-			game.state.states["AngryBirds.Game"].explosion.visible = false;
+			this.explosion.visible = false;
 
 			// PLACING THE EXPLOSION SPRITE WHERE ENEMY IS LOCATED
-			game.state.states["AngryBirds.Game"].explosion.position.x = this.bird.position.x - 24;
-			game.state.states["AngryBirds.Game"].explosion.position.y = this.bird.position.y - 24;
+			this.explosion.position.x = this.bird.position.x - 24;
+			this.explosion.position.y = this.bird.position.y - 24;
 
 			// KILLING THE BIRD
 			this.bird.kill();
 
 			// PLAYING THE EXPLOSION ANIMATION
-			game.state.states["AngryBirds.Game"].explosion.animations.play("explosion", 10, false);
+			this.explosion.animations.play("explosion", 10, false);
 
 			// SHOWING THE EXPLOSION SPRITE
-			game.state.states["AngryBirds.Game"].explosion.visible = true;
+			this.explosion.visible = true;
 
 			// SHOWING A NEW BIRD 1 SECOND LATER
 			this.game.time.events.add(Phaser.Timer.SECOND, function()
