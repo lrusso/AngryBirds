@@ -295,24 +295,6 @@ AngryBirds.Game.prototype = {
 		this.addBird();
 		},
 
-	hitEnemy: function(bodyA, bodyB, shapeA, shapeB, equation)
-		{
-		// GETTING THE HIT VELOCITY
-		var velocityDiff = Phaser.Point.distance(new Phaser.Point(equation[0].bodyA.velocity[0], equation[0].bodyA.velocity[1]), new Phaser.Point(equation[0].bodyB.velocity[0], equation[0].bodyB.velocity[1]));
-
-		// CHECKING IF THE VELOCITY IS ENOUGH TO KILL THE ENEMY
-		if (velocityDiff > game.state.states["AngryBirds.Game"].KILL_DIFF)
-			{
-			// KILLING THE ENEMY
-			this.kill();
-
-			game.state.states["AngryBirds.Game"].updateScore(100);
-
-			// UPDATING THE DEAD COUNT
-			game.state.states["AngryBirds.Game"].updateDeadCount();
-			}
-		},
-
 	update: function()
 		{
 		// CHECKING IF THE USER IS PREPARING THE SHOT
@@ -364,6 +346,20 @@ AngryBirds.Game.prototype = {
 				// RESTORING THE INITIAL BIRD POSITION
 				this.bird.x = this.pole.x;
 				this.bird.y = this.pole.y;
+
+				// CHECKING IF THE FIRST LINE FOR THE POLE EXISTS
+				if (this.poleLine1!=null)
+					{
+					// DESTROYING THE FIRST LINE FOR THE POLE
+					this.poleLine1.destroy();
+					}
+
+				// CHECKING IF THE SECOND LINE FOR THE POLE EXISTS
+				if (this.poleLine2!=null)
+					{
+					// DESTROYING THE SECOND LINE FOR THE POLE
+					this.poleLine2.destroy();
+					}
 				}
 
 			// CHECKING IF THE USER STOPPED TAPPING OR CLICKING THE SCREEN
@@ -375,6 +371,24 @@ AngryBirds.Game.prototype = {
 				// THROWING THE BIRD
 				this.throwBird();
 				}
+			}
+		},
+
+	hitEnemy: function(bodyA, bodyB, shapeA, shapeB, equation)
+		{
+		// GETTING THE HIT VELOCITY
+		var velocityDiff = Phaser.Point.distance(new Phaser.Point(equation[0].bodyA.velocity[0], equation[0].bodyA.velocity[1]), new Phaser.Point(equation[0].bodyB.velocity[0], equation[0].bodyB.velocity[1]));
+
+		// CHECKING IF THE VELOCITY IS ENOUGH TO KILL THE ENEMY
+		if (velocityDiff > game.state.states["AngryBirds.Game"].KILL_DIFF)
+			{
+			// KILLING THE ENEMY
+			this.kill();
+
+			game.state.states["AngryBirds.Game"].updateScore(100);
+
+			// UPDATING THE DEAD COUNT
+			game.state.states["AngryBirds.Game"].updateDeadCount();
 			}
 		},
 
