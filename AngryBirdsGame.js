@@ -543,6 +543,12 @@ AngryBirds.Game.prototype = {
 			this.birds.create(90 - i * 70, 347, "imageGameBird");
 			}
 
+		// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
+		game.camera.follow(null);
+
+		// MOVING THE CAMERA TO THE INITIAL POSITION
+		game.camera.x = 0;
+
 		// BRINGING THE LEFT SIDE OF THE POLE TO THE FRONT
 		this.game.world.bringToTop(this.poleLeft);
 		},
@@ -578,6 +584,9 @@ AngryBirds.Game.prototype = {
 		// SETTING THE BIRD VELOCITY ACCORDING THE DIFFERENCE VECTOR
 		this.bird.body.velocity.x = Math.abs(diff.x * this.SHOOT_FACTOR)/(diff.x * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.x * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT)
 		this.bird.body.velocity.y = Math.abs(diff.y * this.SHOOT_FACTOR)/(diff.y * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.y * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT)
+
+		// MAKING THE CAMERA TO FOLLOW THE BIRD
+		game.camera.follow(this.bird);
 
 		// ENDING THE TURN
 		this.endTurn();
@@ -684,12 +693,14 @@ AngryBirds.Game.prototype = {
 		// CREATING THE TOAST SHADOW
 		this.toastShadow = game.add.graphics();
 		this.toastShadow.beginFill(0x000000, 0.75);
+		this.toastShadow.fixedToCamera = true;
 
 		// CREATING THE TOAST TEXT
 		this.toastText = game.add.bitmapText(0, 0, "ArialBlackShadow", myText, 20.5);
 		this.toastText.height = 24.5;
 		this.toastText.position.x = game.width / 2 - this.toastText.width / 2;
 		this.toastText.position.y = game.height - this.toastText.height - 18;
+		this.toastText.fixedToCamera = true;
 
 		// DRAWING THE TOAST SHADOW
 		this.toastShadow.drawRoundedRect(game.width / 2 - this.toastText.width / 2 - 10, game.height - 52, this.toastText.width + 20, 42, 10);
