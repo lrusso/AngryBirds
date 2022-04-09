@@ -161,6 +161,7 @@ AngryBirds.Game = function (game)
 	this.poleLine1 = null;
 	this.poleLine2 = null;
 	this.bird = null;
+	this.birdLauncher = null;
 	this.scoreLabel = null;
 	this.scoreValue = null;
 	this.gameWon = null;
@@ -214,6 +215,7 @@ AngryBirds.Game.prototype = {
 		this.poleLine1 = null;
 		this.poleLine2 = null;
 		this.bird = null;
+		this.birdLauncher = null;
 		this.scoreLabel = null;
 		this.scoreValue = 0;
 		this.gameWon = false;
@@ -283,8 +285,12 @@ AngryBirds.Game.prototype = {
 		this.scoreLabel.position.x = game.width - this.scoreLabel.width - 10;
 		this.scoreLabel.fixedToCamera = true;
 
-		// PREPARING THE SHOT WHEN THE USER CLICKS OR TAPS ON THE SCREEN
-		this.game.input.onDown.add(function()
+		// ADDING THE BIRD LAUNCHER
+		this.birdLauncher = game.add.graphics(0, 0);
+		this.birdLauncher.beginFill(0x000000,0);
+		this.birdLauncher.drawRect(145, 265, 75, 75);
+		this.birdLauncher.inputEnabled = true;
+		this.birdLauncher.events.onInputDown.add(function()
 			{
 			// CHECKING IF THE BIRD IS READY TO BE THROWN
 			if (this.isBirdReady==true)
@@ -292,7 +298,11 @@ AngryBirds.Game.prototype = {
 				// SETTING THAT THE USER IS PREPARING THE SHOT
 				this.isPreparingShot = true;
 				}
+			},this);
 
+		// PREPARING THE SHOT WHEN THE USER CLICKS OR TAPS ON THE SCREEN
+		this.game.input.onDown.add(function()
+			{
 			// CHECKING IF THE SWIPE CHECKING ISN'T ENABLED
 			if (this.swipeCheckingEnabled==false)
 				{
@@ -336,10 +346,10 @@ AngryBirds.Game.prototype = {
 				this.swipeCheckingEnabled = false;
 
 				// UPDATING THE FIRST FINGER/MOUSE POSITION
-				this.startX = endX;
+				this.startX = endX + 5;
 
 				// MOVING THE WORLD CAMERA TO THE LEFT
-				game.camera.x = game.camera.x + 10;
+				game.camera.x = game.camera.x + 12;
 				}
 
 			// CHECKING IF THERE WAS A RIGHT SWIPE
@@ -349,10 +359,10 @@ AngryBirds.Game.prototype = {
 				this.swipeCheckingEnabled = false;
 
 				// UPDATING THE FIRST FINGER/MOUSE POSITION
-				this.startX = endX;
+				this.startX = endX - 5;
 
 				// MOVING THE WORLD CAMERA TO THE RIGHT
-				game.camera.x = game.camera.x - 10;
+				game.camera.x = game.camera.x - 12;
 				}
 			}
 
