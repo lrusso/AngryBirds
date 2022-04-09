@@ -603,6 +603,9 @@ AngryBirds.Game.prototype = {
 			// SETTING THAT THE USER WON THE GAME
 			this.gameWon = true;
 
+			// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
+			game.camera.follow(null);
+
 			// SHOWING THE 'YOU WIN' TOAST
 			this.showToast(STRING_YOUWIN);
 
@@ -644,6 +647,9 @@ AngryBirds.Game.prototype = {
 					// CHECKING IF THE USER DIDN'T WIN THE GAME
 					if (this.gameWon==false)
 						{
+						// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
+						game.camera.follow(null);
+
 						// SHOWING THE 'YOU LOSE' TOAST
 						this.showToast(STRING_YOULOSE);
 
