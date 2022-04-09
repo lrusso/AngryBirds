@@ -194,7 +194,7 @@ AngryBirds.Game.prototype = {
 		this.toastText = null;
 		this.toastShadow = null;
 		this.currentLevel = "level1";
-		this.MAX_DISTANCE_SHOOT = 190;
+		this.MAX_DISTANCE_SHOOT = 200;
 		this.MAX_SPEED_SHOOT = 1000;
 		this.SHOOT_FACTOR = 12;
 		this.KILL_DIFF = 10;
@@ -610,8 +610,8 @@ AngryBirds.Game.prototype = {
 		var diff = Phaser.Point.subtract(this.pole.position, this.bird.position);
 
 		// SETTING THE BIRD VELOCITY ACCORDING THE DIFFERENCE VECTOR
-		this.bird.body.velocity.x = Math.abs(diff.x * this.SHOOT_FACTOR)/(diff.x * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.x * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT)
-		this.bird.body.velocity.y = Math.abs(diff.y * this.SHOOT_FACTOR)/(diff.y * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.y * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT)
+		this.bird.body.velocity.x = Math.abs(diff.x * this.SHOOT_FACTOR)/(diff.x * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.x * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT) - 30;
+		this.bird.body.velocity.y = Math.abs(diff.y * this.SHOOT_FACTOR)/(diff.y * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.y * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT) - 30;
 
 		// MAKING THE CAMERA TO FOLLOW THE BIRD
 		game.camera.follow(this.bird);
