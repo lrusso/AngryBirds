@@ -169,7 +169,7 @@ AngryBirds.Game = function (game)
 	this.gameWon = null;
 	this.startX = null;
 	this.swipeCheckingEnabled = null;
-	this.enemyExplosion = null;
+	this.explosion = null;
 
 	// SCALING THE CANVAS SIZE FOR THE GAME
 	function resizeF()
@@ -224,7 +224,7 @@ AngryBirds.Game.prototype = {
 		this.gameWon = false;
 		this.startX = 0;
 		this.swipeCheckingEnabled = false;
-		this.enemyExplosion = null;
+		this.explosion = null;
 		},
 
 	create: function()
@@ -272,15 +272,15 @@ AngryBirds.Game.prototype = {
 		// ADDING THE FLOOR GRASS FRONT FRONT
 		this.floorGrassFront = this.add.tileSprite(-3, this.game.world.height - 60, this.game.world.width * 2, this.game.world.height - 420, "imageGameGrassFront");
 
-		// ADDING THE ENEMY'S EXPLOSION
-		this.enemyExplosion = game.add.sprite(420, 307, "imageGameExplosion");
-		this.enemyExplosionAnimation = this.enemyExplosion.animations.add("explosion", [0, 1, 2, 3, 4]);
-		this.enemyExplosionAnimation.onComplete.add(function()
+		// ADDING THE EXPLOSION SPRITE
+		this.explosion = game.add.sprite(420, 307, "imageGameExplosion");
+		this.explosionAnimation = this.explosion.animations.add("explosion", [0, 1, 2, 3, 4]);
+		this.explosionAnimation.onComplete.add(function()
 			{
-			// HIDING THE ENEMY'S EXPLOSION
-			this.enemyExplosion.visible = false;
+			// HIDING THE EXPLOSION SPRITE
+			this.explosion.visible = false;
 			}, this);
-		this.enemyExplosion.visible = false;
+		this.explosion.visible = false;
 
 		// ADDING THE POLE
 		this.pole = this.add.sprite(180, 300, "imageGamePole");
@@ -465,21 +465,21 @@ AngryBirds.Game.prototype = {
 		// CHECKING IF THE VELOCITY IS ENOUGH TO KILL THE ENEMY
 		if (velocityDiff > game.state.states["AngryBirds.Game"].KILL_DIFF)
 			{
-			// HIDING THE ENEMY EXPLOSION ANIMATION
-			game.state.states["AngryBirds.Game"].enemyExplosion.visible = false;
+			// HIDING THE EXPLOSION SPRITE
+			game.state.states["AngryBirds.Game"].explosion.visible = false;
 
-			// PLACING THE ENEMY EXPLOSION ANIMATION WHERE ENEMY IS
-			game.state.states["AngryBirds.Game"].enemyExplosion.position.x = this.position.x - 24;
-			game.state.states["AngryBirds.Game"].enemyExplosion.position.y = this.position.y - 24;
+			// PLACING THE EXPLOSION SPRITE WHERE ENEMY IS LOCATED
+			game.state.states["AngryBirds.Game"].explosion.position.x = this.position.x - 24;
+			game.state.states["AngryBirds.Game"].explosion.position.y = this.position.y - 24;
 
 			// KILLING THE ENEMY
 			this.kill();
 
 			// PLAYING THE EXPLOSION ANIMATION
-			game.state.states["AngryBirds.Game"].enemyExplosion.animations.play("explosion", 8, false);
+			game.state.states["AngryBirds.Game"].explosion.animations.play("explosion", 10, false);
 
-			// SHOWING THE ENEMY EXPLOSION ANIMATION
-			game.state.states["AngryBirds.Game"].enemyExplosion.visible = true;
+			// SHOWING THE EXPLOSION SPRITE
+			game.state.states["AngryBirds.Game"].explosion.visible = true;
 
 			// UPDATING THE SCORE
 			game.state.states["AngryBirds.Game"].updateScore(100);
@@ -657,8 +657,21 @@ AngryBirds.Game.prototype = {
 			// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
 			game.camera.follow(null);
 
+			// HIDING THE EXPLOSION SPRITE
+			game.state.states["AngryBirds.Game"].explosion.visible = false;
+
+			// PLACING THE EXPLOSION SPRITE WHERE ENEMY IS LOCATED
+			game.state.states["AngryBirds.Game"].explosion.position.x = this.bird.position.x - 24;
+			game.state.states["AngryBirds.Game"].explosion.position.y = this.bird.position.y - 24;
+
 			// KILLING THE BIRD
 			this.bird.kill();
+
+			// PLAYING THE EXPLOSION ANIMATION
+			game.state.states["AngryBirds.Game"].explosion.animations.play("explosion", 10, false);
+
+			// SHOWING THE EXPLOSION SPRITE
+			game.state.states["AngryBirds.Game"].explosion.visible = true;
 
 			// SHOWING A NEW BIRD 1 SECOND LATER
 			this.game.time.events.add(Phaser.Timer.SECOND, function()
