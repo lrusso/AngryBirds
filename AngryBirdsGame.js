@@ -615,6 +615,8 @@ AngryBirds.Game = function (game)
 	this.isPreparingShot = null;
 	this.isBirdReady = null;
 	this.availableBirdsCounter = null;
+	this.birds = null;
+	this.poles = null;
 	this.enemies = null;
 	this.blocks = null;
 	this.floor = null;
@@ -673,6 +675,8 @@ AngryBirds.Game.prototype = {
 		this.isPreparingShot = false;
 		this.isBirdReady = false;
 		this.availableBirdsCounter = 0;
+		this.birds = null;
+		this.poles = null;
 		this.enemies = null;
 		this.blocks = null;
 		this.floor = null;
@@ -722,6 +726,9 @@ AngryBirds.Game.prototype = {
 		// CREATING THE BIRDS GROUP
 		this.birds = this.add.group();
 
+		// CREATING THE POLES GROUP
+		this.poles = this.add.group();
+
 		// CREATING THE ENEMIES GROUP
 		this.enemies = this.add.group();
 		this.enemies.enableBody = true;
@@ -745,16 +752,6 @@ AngryBirds.Game.prototype = {
 		// ADDING THE FLOOR GRASS FRONT FRONT
 		this.floorGrassFront = this.add.tileSprite(-3, this.game.world.height - 60, this.game.world.width * 2, this.game.world.height - 420, "imageGameGrassFront");
 
-		// ADDING THE EXPLOSION SPRITE
-		this.explosion = game.add.sprite(420, 307, "imageGameExplosion");
-		this.explosionAnimation = this.explosion.animations.add("explosion", [0, 1, 2, 3, 4]);
-		this.explosionAnimation.onComplete.add(function()
-			{
-			// HIDING THE EXPLOSION SPRITE
-			this.explosion.visible = false;
-			}, this);
-		this.explosion.visible = false;
-
 		// ADDING THE POLE
 		this.pole = this.add.sprite(180, 300, "imageGamePole");
 		this.pole.anchor.setTo(0.5, 0);
@@ -765,6 +762,16 @@ AngryBirds.Game.prototype = {
 		this.poleLeft = this.add.sprite(166, 291, "imageGamePoleLeft");
 		this.poleLeft.width = this.poleLeft.width * 0.5;
 		this.poleLeft.height = this.poleLeft.height * 0.5;
+
+		// ADDING THE EXPLOSION SPRITE
+		this.explosion = game.add.sprite(420, 307, "imageGameExplosion");
+		this.explosionAnimation = this.explosion.animations.add("explosion", [0, 1, 2, 3, 4]);
+		this.explosionAnimation.onComplete.add(function()
+			{
+			// HIDING THE EXPLOSION SPRITE
+			this.explosion.visible = false;
+			}, this);
+		this.explosion.visible = false;
 
 		// ADDING THE SCORE TEXT
 		this.scoreLabel = game.add.bitmapText(10, 5, "AngryBirdsFont", STRING_SCORE + " " + this.addingZeros(this.scoreValue,4), 30);
@@ -941,6 +948,7 @@ AngryBirds.Game.prototype = {
 			this.poleLine2.lineStyle(6, 0x301708);
 			this.poleLine2.moveTo(this.pole.position.x + 15,this.pole.position.y + 9);
 			this.poleLine2.lineTo(maxX - this.bird.width / 2 + 7, maxY + 9);
+			this.poles.add(this.poleLine2);
 
 			// BRINGING THE LEFT SIDE OF THE POLE TO THE FRONT
 			this.game.world.bringToTop(this.poleLeft);
