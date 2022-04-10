@@ -226,6 +226,7 @@ AngryBirds.Disclaimer.prototype = {
 		this.line2 = null;
 		this.line3 = null;
 		this.line4 = null;
+		this.line4Accent = null;
 		this.line5 = null;
 		this.line6 = null;
 		this.line7 = null;
@@ -258,6 +259,15 @@ AngryBirds.Disclaimer.prototype = {
 		this.line4 = game.add.bitmapText(0, this.marginY + 170, "ArialBlackWhite", STRING_DISCLAIMER4, 20);
 		this.line4.height = 25;
 		this.line4.position.x = game.width / 2 - this.line4.width / 2;
+
+		// CHECKING THE USER LANGUAGE IS RUNNING THE GAME IN SPANISH
+		if (userLanguage.substring(0,2)=="es")
+			{
+			// ADDING A SPANISH ACCENT TO AN SPECIFIC WORD IN THE DISCLAIMER LINE 4
+			this.line4Accent = game.add.bitmapText(0, this.line4.position.y - 5, "ArialBlackWhite", "´", 20);
+			this.line4Accent.height = 24;
+			this.line4Accent.position.x = this.line4.position.x + 190;
+			}
 
 		// ADDING THE DISCLAIMER LINE 5
 		this.line5 = game.add.bitmapText(0, this.marginY + 210, "ArialBlackWhite", STRING_DISCLAIMER5, 20);
