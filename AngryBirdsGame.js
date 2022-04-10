@@ -429,9 +429,6 @@ AngryBirds.Menu.prototype = {
 
 	create: function()
 		{
-		// GETTING THE SOUND PREFERENCE
-		GAME_SOUND_ENABLED = this.getBooleanSetting("GAME_SOUND_ENABLED");
-
 		// ADDING THE BACKGROUND
 		this.menuBackgroundImage = this.add.tileSprite(0, 0, this.game.world.width, this.game.world.height, "imageGameBackground");
 
@@ -637,6 +634,8 @@ AngryBirds.Game = function (game)
 	this.swipeCheckingEnabled = null;
 	this.explosion = null;
 	this.audioPlayer = null;
+	this.soundIcon = null;
+	this.soundHandler = null;
 
 	// SCALING THE CANVAS SIZE FOR THE GAME
 	function resizeF()
@@ -693,6 +692,8 @@ AngryBirds.Game.prototype = {
 		this.swipeCheckingEnabled = false;
 		this.explosion = null;
 		this.audioPlayer = null;
+		this.soundIcon = null;
+		this.soundHandler = null;
 		},
 
 	create: function()
@@ -770,6 +771,28 @@ AngryBirds.Game.prototype = {
 		this.scoreLabel.height = 34;
 		this.scoreLabel.position.x = game.width - this.scoreLabel.width - 10;
 		this.scoreLabel.fixedToCamera = true;
+
+		// CHECKING IF THE SOUND IS ENABLED
+		if (GAME_SOUND_ENABLED==true)
+			{
+			// ADDING THE SOUND ON ICON
+			this.soundIcon = this.add.sprite(5, 5, "imageMenuSoundOn");
+			this.soundIcon.fixedToCamera = true;
+			}
+			else
+			{
+			// ADDING THE SOUND OFF ICON
+			this.soundIcon = this.add.sprite(5, 5, "imageMenuSoundOff");
+			this.soundIcon.fixedToCamera = true;
+			}
+
+		// ADDING THE SOUND ICON HANDLER
+		this.soundHandler = game.add.graphics();
+		this.soundHandler.beginFill(0x000000, 0);
+		this.soundHandler.drawRect(0, 0, 80, 80, 10);
+		this.soundHandler.fixedToCamera = true;
+		this.soundHandler.inputEnabled = true;
+		this.soundHandler.events.onInputUp.add(function(){this.toggleSound()},this);
 
 		// ADDING THE BIRD LAUNCHER
 		this.birdLauncher = game.add.graphics(0, 0);
@@ -1288,6 +1311,54 @@ AngryBirds.Game.prototype = {
 
 		// RETURNING THE STRING WITH ALL THE REQUIRED ZEROS
 		return my_string;
+		},
+
+	toggleSound: function()
+		{
+		// CHECKING IF THE SOUND IS ENABLED
+		if (GAME_SOUND_ENABLED==true)
+			{
+			// DISABLING THE SOUND
+			GAME_SOUND_ENABLED = false;
+
+			// SAVING THE SOUND PREFERENCE
+			this.setBooleanSetting("GAME_SOUND_ENABLED", false);
+
+			// SHOWING THE SOUND DISABLED IMAGES
+			this.soundIcon.loadTexture("imageMenuSoundOff");
+			}
+			else
+			{
+			// ENABLING THE SOUND
+			GAME_SOUND_ENABLED = true;
+
+			// SAVING THE SOUND PREFERENCE
+			this.setBooleanSetting("GAME_SOUND_ENABLED", true);
+
+			// SHOWING THE SOUND ENABLED IMAGES
+			this.soundIcon.loadTexture("imageMenuSoundOn")
+			}
+		},
+
+	setBooleanSetting: function(settingName, settingValue)
+		{
+		try
+			{
+			var name = "angrybirds" + settingName;
+			var value = String(settingValue);
+			var days = 999;
+			var expires = "";
+			if (days)
+				{
+				var date = new Date();
+				date.setTime(date.getTime() + (days*24*60*60*1000));
+				expires = "; expires=" + date.toUTCString();
+				}
+			document.cookie = name + "=" + (value || "")  + expires + "; Secure; path=/";
+			}
+			catch(err)
+			{
+			}
 		},
 
 	showToast: function(myText)
