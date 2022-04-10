@@ -896,7 +896,7 @@ AngryBirds.Game.prototype = {
 			{
 			// SETTING THE FLOOR AND POLE LIMIT VALUES
 			var maxY = 370;
-			var maxX = 160;
+			var maxX = 180;
 
 			// CHECKING IF THE Y POINTER VALUE IS OVER THE FLOOR
 			if (this.game.input.activePointer.position.y<maxY)
@@ -1153,6 +1153,9 @@ AngryBirds.Game.prototype = {
 
 		// CALCULATING THE DIFFERENCE BETWEEN THE CURRENT POSITION AND TOP OF POLE
 		var diff = Phaser.Point.subtract(this.pole.position, this.bird.position);
+
+		// FIXING FOR A THROWING WITHOUT POWER
+		if(diff.x<=1){diff.x=7}
 
 		// SETTING THE BIRD VELOCITY ACCORDING THE DIFFERENCE VECTOR
 		this.bird.body.velocity.x = Math.abs(diff.x * this.SHOOT_FACTOR)/(diff.x * this.SHOOT_FACTOR) * Math.min(Math.abs(diff.x * this.SHOOT_FACTOR), this.MAX_SPEED_SHOOT);
