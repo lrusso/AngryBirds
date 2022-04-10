@@ -902,26 +902,44 @@ AngryBirds.Game.prototype = {
 		if (this.isPreparingShot==true && this.bird.body==null)
 			{
 			// SETTING THE FLOOR AND POLE LIMIT VALUES
+			var minY = 170;
 			var maxY = 370;
+			var minX = 24;
 			var maxX = 180;
+			var currentX = maxX;
+			var currentY = maxY;
 
 			// CHECKING IF THE Y POINTER VALUE IS OVER THE FLOOR
 			if (this.game.input.activePointer.position.y<maxY)
 				{
 				// USING THE Y POINTER VALUE
-				maxY = this.game.input.activePointer.position.y;
+				currentY = this.game.input.activePointer.position.y;
+				}
+
+			// CHECKING IF THE Y POINTER BELOW THE MINIUM
+			if (this.game.input.activePointer.position.y<minY)
+				{
+				// USING THE Y POINTER VALUE
+				currentY = minY;
 				}
 
 			// CHECKING IF THE X POINTER VALUE IS BEFORE THE POLE
 			if (this.game.input.activePointer.position.x<maxX)
 				{
 				// USING THE X POINTER VALUE
-				maxX = this.game.input.activePointer.position.x;
+				currentX = this.game.input.activePointer.position.x;
+				}
+
+			// CHECKING IF THE X POINTER VALUE IS OFF THE SCREEN
+			if (this.game.input.activePointer.position.x<minX)
+				{
+				// USING THE X POINTER VALUE
+				currentX = minX;
 				}
 
 			// MAKING THE BIRD FOLLOW USER INPUT POINTER
-			this.bird.x = maxX;
-			this.bird.y = maxY;
+			this.bird.x = currentX;
+			this.bird.y = currentY;
 
 			// CHECKING IF THE FIRST LINE FOR THE POLE EXISTS
 			if (this.poleLine1!=null)
@@ -941,13 +959,13 @@ AngryBirds.Game.prototype = {
 			this.poleLine1 = game.add.graphics(0, 0);
 			this.poleLine1.lineStyle(6, 0x301708);
 			this.poleLine1.moveTo(this.pole.position.x - 10,this.pole.position.y + 9);
-			this.poleLine1.lineTo(maxX - this.bird.width / 2 + 7, maxY + 9);
+			this.poleLine1.lineTo(currentX - this.bird.width / 2 + 7, currentY + 9);
 
 			// DRAWING THE SECOND LINE FOR THE POLE
 			this.poleLine2 = game.add.graphics(0, 0);
 			this.poleLine2.lineStyle(6, 0x301708);
 			this.poleLine2.moveTo(this.pole.position.x + 15,this.pole.position.y + 9);
-			this.poleLine2.lineTo(maxX - this.bird.width / 2 + 7, maxY + 9);
+			this.poleLine2.lineTo(currentX - this.bird.width / 2 + 7, currentY + 9);
 			this.poles.add(this.poleLine2);
 
 			// BRINGING THE LEFT SIDE OF THE POLE TO THE FRONT
@@ -955,32 +973,6 @@ AngryBirds.Game.prototype = {
 
 			// GETTING THE DISTANCE BETWEEN THE BIRD AND THE POLE
 			var distance = Phaser.Point.distance(this.bird.position, this.pole.position);
-
-			// CHECKING IF THE DISTANCE IS MORE THAT MAXIMUM DISTANCE ALLOWED
-			if (distance > this.MAX_DISTANCE_SHOOT)
-				{
-				// SETTING THAT THE BIRD CANNOT BE THROWN
-				this.isPreparingShot = false;
-				this.isBirdReady = true;
-
-				// RESTORING THE INITIAL BIRD POSITION
-				this.bird.x = this.pole.x;
-				this.bird.y = this.pole.y;
-
-				// CHECKING IF THE FIRST LINE FOR THE POLE EXISTS
-				if (this.poleLine1!=null)
-					{
-					// DESTROYING THE FIRST LINE FOR THE POLE
-					this.poleLine1.destroy();
-					}
-
-				// CHECKING IF THE SECOND LINE FOR THE POLE EXISTS
-				if (this.poleLine2!=null)
-					{
-					// DESTROYING THE SECOND LINE FOR THE POLE
-					this.poleLine2.destroy();
-					}
-				}
 
 			// CHECKING IF THE USER STOPPED TAPPING OR CLICKING THE SCREEN
 			if(this.game.input.activePointer.isUp==true)
