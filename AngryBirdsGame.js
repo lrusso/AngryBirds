@@ -442,7 +442,7 @@ AngryBirds.Menu.prototype = {
 		this.menuFloorGrassFront = this.add.tileSprite(0, this.game.world.height - 60, this.game.world.width, this.game.world.height - 420, "imageGameGrassFront");
 
 		// ADDING THE GAME TITLE
-		this.menuTitle = this.add.sprite(0, 15, "imageMenuTitle");
+		this.menuTitle = this.add.sprite(0, 25, "imageMenuTitle");
 		this.menuTitle.position.x = game.width / 2 - this.menuTitle.width / 2;
 
 		// ADDING THE PLAY BUTTON
