@@ -809,26 +809,26 @@ AngryBirds.Game.prototype = {
 		this.birdLauncher.events.onInputDown.add(function()
 			{
 			// CHECKING IF THE BIRD IS READY TO BE THROWN
-			if (this.isBirdReady==true)
+			if (this.isBirdReady==true && this.bird.body==null)
 				{
+				// CHECKING IF THE SOUND IS ENABLED AND IF THE SHOT IS ABOUT THE BE PREPARED
+				if (GAME_SOUND_ENABLED==true && this.isPreparingShot==false)
+					{
+					// LOADING THE AUDIO SLINGSHOT
+					this.audioPlayer = this.add.audio("audioSlingshot");
+
+					// SETTING THE AUDIO SLINGSHOT VOLUME
+					this.audioPlayer.volume = 1;
+
+					// SETTING THAT THE AUDIO SLINGSHOT WON'T BE LOOPING
+					this.audioPlayer.loop = false;
+
+					// PLAYING THE AUDIO SLINGSHOT
+					this.audioPlayer.play();
+					}
+
 				// SETTING THAT THE USER IS PREPARING THE SHOT
 				this.isPreparingShot = true;
-				}
-
-			// CHECKING IF THE SOUND IS ENABLED
-			if (GAME_SOUND_ENABLED==true)
-				{
-				// LOADING THE AUDIO SLINGSHOT
-				this.audioPlayer = this.add.audio("audioSlingshot");
-
-				// SETTING THE AUDIO SLINGSHOT VOLUME
-				this.audioPlayer.volume = 1;
-
-				// SETTING THAT THE AUDIO SLINGSHOT WON'T BE LOOPING
-				this.audioPlayer.loop = false;
-
-				// PLAYING THE AUDIO SLINGSHOT
-				this.audioPlayer.play();
 				}
 			},this);
 
