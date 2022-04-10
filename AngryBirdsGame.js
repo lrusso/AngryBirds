@@ -596,7 +596,6 @@ AngryBirds.Menu.prototype = {
 
 			// PLAYING THE INTRO MUSIC
 			game.state.states["AngryBirds.SplashGame"].musicPlayer.play();
-
 			}
 		}
 	};
