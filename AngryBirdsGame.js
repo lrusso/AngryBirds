@@ -1154,7 +1154,7 @@ AngryBirds.Game.prototype = {
 		// CALCULATING THE DIFFERENCE BETWEEN THE CURRENT POSITION AND TOP OF POLE
 		var diff = Phaser.Point.subtract(this.pole.position, this.bird.position);
 
-		// FIXING FOR A THROWING WITHOUT POWER
+		// FIXING A THROWING WITHOUT POWER
 		if(diff.x<=1){diff.x=7}
 
 		// SETTING THE BIRD VELOCITY ACCORDING THE DIFFERENCE VECTOR
