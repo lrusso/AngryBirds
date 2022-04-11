@@ -997,6 +997,12 @@ AngryBirds.Game.prototype = {
 			// BRINGING THE LEFT SIDE OF THE POLE TO THE FRONT
 			this.game.world.bringToTop(this.poleLeft);
 
+			// BRINGING THE SCORE LABEL TO THE FRONT
+			this.game.world.bringToTop(this.scoreLabel);
+
+			// BRINGING THE SOUND ICON TO THE FRONT
+			this.game.world.bringToTop(this.soundIcon);
+
 			// GETTING THE DISTANCE BETWEEN THE BIRD AND THE POLE
 			var distance = Phaser.Point.distance(this.bird.position, this.pole.position);
 
