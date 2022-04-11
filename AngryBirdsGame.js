@@ -246,7 +246,7 @@ AngryBirds.Splash.prototype = {
 		// WAITING 4750 MS
 		game.time.events.add(4750, function()
 			{
-			// LOADING THE DISCLAIMER SCREEN
+			// LOADING THE DISCLAIMER
 			game.state.start("AngryBirds.Disclaimer", Phaser.Plugin.StateTransition.Out.SlideLeft);
 			});
 		}
