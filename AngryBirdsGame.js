@@ -936,6 +936,22 @@ AngryBirds.Game.prototype = {
 				this.musicPlayer.pause();
 				}
 
+			// CHECKING IF THE SOUND IS ENABLED
+			if (GAME_SOUND_ENABLED==true)
+				{
+				// LOADING THE INTRO MUSIC
+				game.state.states["AngryBirds.SplashGame"].musicPlayer = game.state.states["AngryBirds.SplashGame"].add.audio("audioIntro");
+
+				// SETTING THE INTRO MUSIC VOLUME
+				game.state.states["AngryBirds.SplashGame"].musicPlayer.volume = 1;
+
+				// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
+				game.state.states["AngryBirds.SplashGame"].musicPlayer.loop = true;
+
+				// PLAYING THE INTRO MUSIC
+				game.state.states["AngryBirds.SplashGame"].musicPlayer.play();
+				}
+
 			// LOADING THE LEVEL SELECTOR
 			game.state.start("AngryBirds.LevelSelector", Phaser.Plugin.StateTransition.Out.SlideRight);
 			},this);
