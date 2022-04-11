@@ -776,6 +776,8 @@ AngryBirds.Game = function (game)
 	this.audioPlayer = null;
 	this.soundIcon = null;
 	this.soundHandler = null;
+	this.menuIcon = null;
+	this.menuHandler = null;
 
 	// SCALING THE CANVAS SIZE FOR THE GAME
 	function resizeF()
@@ -835,6 +837,8 @@ AngryBirds.Game.prototype = {
 		this.audioPlayer = null;
 		this.soundIcon = null;
 		this.soundHandler = null;
+		this.menuIcon = null;
+		this.menuHandler = null;
 		},
 
 	create: function()
