@@ -32,6 +32,13 @@
 		<iframe id="content" src="about:blank"></iframe>
 		<script>
 
+			// WORKAROUND FOR ENABLING AUDIO IN SAFARI
+			var finalAudioContext = null;
+			window.AudioContext = window.AudioContext || window.webkitAudioContext;
+			function fixAudioContext(e){if(finalAudioContext==null){finalAudioContext=new AudioContext();finalAudioContext.resume();}}
+			document.addEventListener("click",fixAudioContext);
+			document.addEventListener("touchstart",fixAudioContext);
+
 			function resizeContent()
 				{
 				var w = window.innerWidth;
