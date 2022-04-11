@@ -921,7 +921,7 @@ AngryBirds.Game.prototype = {
 		// ADDING THE MENU ICON HANDLER
 		this.menuHandler = game.add.graphics();
 		this.menuHandler.beginFill(0x000000, 0);
-		this.menuHandler.drawRect(0, 0, 75, 75, 10);
+		this.menuHandler.drawRect(5, 5, 60, 60, 10);
 		this.menuHandler.fixedToCamera = true;
 		this.menuHandler.inputEnabled = true;
 		this.menuHandler.events.onInputUp.add(function()
@@ -977,7 +977,7 @@ AngryBirds.Game.prototype = {
 		// ADDING THE SOUND ICON HANDLER
 		this.soundHandler = game.add.graphics();
 		this.soundHandler.beginFill(0x000000, 0);
-		this.soundHandler.drawRect(83, 0, 75, 75, 10);
+		this.soundHandler.drawRect(90, 5, 60, 60, 10);
 		this.soundHandler.fixedToCamera = true;
 		this.soundHandler.inputEnabled = true;
 		this.soundHandler.events.onInputUp.add(function(){this.toggleSound()},this);
@@ -1167,6 +1167,9 @@ AngryBirds.Game.prototype = {
 
 			// BRINGING THE LEFT SIDE OF THE POLE TO THE FRONT
 			this.game.world.bringToTop(this.poleLeft);
+
+			// BRINGING THE MENU ICON TO THE FRONT
+			this.game.world.bringToTop(this.menuIcon);
 
 			// BRINGING THE SOUND ICON TO THE FRONT
 			this.game.world.bringToTop(this.soundIcon);
