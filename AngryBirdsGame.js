@@ -668,6 +668,8 @@ AngryBirds.LevelSelector.prototype = {
 		this.levelSelectorLevel14Number = null;
 		this.levelSelectorLevel15Image = null;
 		this.levelSelectorLevel15Number = null;
+		this.levelSelectorGoBackImage = null;
+		this.levelSelectorGoBackImageHandler = null;
 		},
 
 	create: function()
