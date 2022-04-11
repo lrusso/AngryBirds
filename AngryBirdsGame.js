@@ -15,7 +15,6 @@ var userLanguage = window.navigator.userLanguage || window.navigator.language;
 
 var STRING_PLAY = "";
 var STRING_PLAYWIDTH = "";
-var STRING_SCORE = "";
 var STRING_YOUWIN = "";
 var STRING_YOULOSE = "";
 var STRING_DISCLAIMER1 = "";
@@ -33,7 +32,6 @@ if (userLanguage.substring(0,2)=="es")
 	{
 	STRING_PLAY = "JUGAR";
 	STRING_PLAYWIDTH = 130;
-	STRING_SCORE = "PUNTAJE:";
 	STRING_YOUWIN = String.fromCharCode(161) + "Has ganado!";
 	STRING_YOULOSE = String.fromCharCode(161) + "Has perdido!";
 	STRING_DISCLAIMER1 = "DESCARGO DE RESPONSABILIDAD";
@@ -50,7 +48,6 @@ if (userLanguage.substring(0,2)=="es")
 	{
 	STRING_PLAY = "PLAY";
 	STRING_PLAYWIDTH = 108;
-	STRING_SCORE = "SCORE:";
 	STRING_YOUWIN = "You win!";
 	STRING_YOULOSE = "You lose!"
 	STRING_DISCLAIMER1 = "DISCLAIMER";
