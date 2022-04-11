@@ -1165,13 +1165,13 @@ AngryBirds.Game.prototype = {
 			this.poleLine2.lineTo(currentX - this.bird.width / 2 + 7, currentY + 9);
 			this.poles.add(this.poleLine2);
 
-			// BRINGING THE LEFT SIDE OF THE POLE TO THE FRONT
+			// BRINGING THE LEFT SIDE OF THE POLE TO THE TOP
 			this.game.world.bringToTop(this.poleLeft);
 
-			// BRINGING THE MENU ICON TO THE FRONT
+			// BRINGING THE MENU ICON TO THE TOP
 			this.game.world.bringToTop(this.menuIcon);
 
-			// BRINGING THE SOUND ICON TO THE FRONT
+			// BRINGING THE SOUND ICON TO THE TOP
 			this.game.world.bringToTop(this.soundIcon);
 
 			// GETTING THE DISTANCE BETWEEN THE BIRD AND THE POLE
@@ -1336,7 +1336,7 @@ AngryBirds.Game.prototype = {
 		// MOVING THE CAMERA TO THE INITIAL POSITION
 		game.camera.x = 0;
 
-		// BRINGING THE LEFT SIDE OF THE POLE TO THE FRONT
+		// BRINGING THE LEFT SIDE OF THE POLE TO THE TOP
 		this.game.world.bringToTop(this.poleLeft);
 		},
 
