@@ -640,37 +640,6 @@ AngryBirds.LevelSelector.prototype = {
 	init: function()
 		{
 		this.levelSelectorBackgroundImage = null;
-		this.levelSelectorLevel1Image = null;
-		this.levelSelectorLevel1Number = null;
-		this.levelSelectorLevel1Handler = null;
-		this.levelSelectorLevel2Image = null;
-		this.levelSelectorLevel2Number = null;
-		this.levelSelectorLevel3Image = null;
-		this.levelSelectorLevel3Number = null;
-		this.levelSelectorLevel4Image = null;
-		this.levelSelectorLevel4Number = null;
-		this.levelSelectorLevel5Image = null;
-		this.levelSelectorLevel5Number = null;
-		this.levelSelectorLevel6Image = null;
-		this.levelSelectorLevel6Number = null;
-		this.levelSelectorLevel7Image = null;
-		this.levelSelectorLevel7Number = null;
-		this.levelSelectorLevel8Image = null;
-		this.levelSelectorLevel8Number = null;
-		this.levelSelectorLevel9Image = null;
-		this.levelSelectorLevel9Number = null;
-		this.levelSelectorLevel10Image = null;
-		this.levelSelectorLevel10Number = null;
-		this.levelSelectorLevel11Image = null;
-		this.levelSelectorLevel11Number = null;
-		this.levelSelectorLevel12Image = null;
-		this.levelSelectorLevel12Number = null;
-		this.levelSelectorLevel13Image = null;
-		this.levelSelectorLevel13Number = null;
-		this.levelSelectorLevel14Image = null;
-		this.levelSelectorLevel14Number = null;
-		this.levelSelectorLevel15Image = null;
-		this.levelSelectorLevel15Number = null;
 		this.levelSelectorGoBackImage = null;
 		this.levelSelectorGoBackImageHandler = null;
 		},
@@ -680,34 +649,31 @@ AngryBirds.LevelSelector.prototype = {
 		// ADDING THE BACKGROUND
 		this.levelSelectorBackgroundImage = this.add.sprite(0, 0, "imageLevelSelectorBackground");
 
-		// ADDING THE FIRST LEVEL
-		this.levelSelectorLevel1Image = this.add.sprite(50, 50, "imageLevelSelectorLevel");
-		this.levelSelectorLevel1Number = game.add.bitmapText(0, 0, "ArialBlackShadow", "1", 20);
-		this.levelSelectorLevel1Number.position.x = this.levelSelectorLevel1Image.position.x + this.levelSelectorLevel1Image.width / 2 - this.levelSelectorLevel1Number.width / 2;
-		this.levelSelectorLevel1Number.position.y = this.levelSelectorLevel1Image.position.y + this.levelSelectorLevel1Image.height / 2 - this.levelSelectorLevel1Number.height / 2 - 5;
-		this.levelSelectorLevel1Handler = game.add.graphics();
-		this.levelSelectorLevel1Handler.beginFill(0x000000, 0);
-		this.levelSelectorLevel1Handler.drawRect(this.levelSelectorLevel1Image.position.x, this.levelSelectorLevel1Image.position.y, this.levelSelectorLevel1Image.width, this.levelSelectorLevel1Image.height, 10);
-		this.levelSelectorLevel1Handler.inputEnabled = true;
-		this.levelSelectorLevel1Handler.events.onInputUp.add(function(){this.startLevel("level1")},this);
+		// ADDING LEVEL BUTTONS FROM 1 TO 5
+		this.createLevelButton(50,   50,  "1", false);
+		this.createLevelButton(200,  50,  "2", true);
+		this.createLevelButton(350,  50,  "3", true);
+		this.createLevelButton(500,  50,  "4", true);
+		this.createLevelButton(650,  50,  "5", true);
 
-		// ADDING THE REST OF THE BLOCKED LEVELS
-		this.levelSelectorLevel2Image = this.add.sprite(200, 50, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel3Image = this.add.sprite(350, 50, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel4Image = this.add.sprite(500, 50, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel5Image = this.add.sprite(650, 50, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel6Image = this.add.sprite(50, 150, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel7Image = this.add.sprite(200, 150, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel8Image = this.add.sprite(350, 150, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel9Image = this.add.sprite(500, 150, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel10Image = this.add.sprite(650, 150, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel11Image = this.add.sprite(50, 250, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel12Image = this.add.sprite(200, 250, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel13Image = this.add.sprite(350, 250, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel14Image = this.add.sprite(500, 250, "imageLevelSelectorBlocked");
-		this.levelSelectorLevel15Image = this.add.sprite(650, 250, "imageLevelSelectorBlocked");
+		// ADDING LEVEL BUTTONS FROM 6 TO 10
+		this.createLevelButton(50,  150,  "6", true);
+		this.createLevelButton(200, 150,  "7", true);
+		this.createLevelButton(350, 150,  "8", true);
+		this.createLevelButton(500, 150,  "9", true);
+		this.createLevelButton(650, 150, "10", true);
 
+		// ADDING LEVEL BUTTONS FROM 11 TO 15
+		this.createLevelButton(50,  250, "11", true);
+		this.createLevelButton(200, 250, "12", true);
+		this.createLevelButton(350, 250, "13", true);
+		this.createLevelButton(500, 250, "14", true);
+		this.createLevelButton(650, 250, "15", true);
+
+		// ADDING THE GO BACK IMAGE
 		this.levelSelectorGoBackImage = this.add.sprite(10, 370, "imageLevelSelectorGoBack");
+
+		// ADDING THE GO BACK HANDLER
 		this.levelSelectorGoBackImageHandler = game.add.graphics();
 		this.levelSelectorGoBackImageHandler.beginFill(0x000000, 0);
 		this.levelSelectorGoBackImageHandler.drawRect(0, 360, 90, 90, 10);
@@ -717,6 +683,33 @@ AngryBirds.LevelSelector.prototype = {
 			// LOADING THE GAME MENU
 			game.state.start("AngryBirds.Menu", Phaser.Plugin.StateTransition.Out.SlideRight);
 			},this);
+		},
+
+	createLevelButton: function(x, y, levelNumber, levelBlocked)
+		{
+		// CHECKING IF THE LEVEL IS BLOCKED
+		if (levelBlocked==true)
+			{
+			// ADDING THE LEVEL BLOCKED IMAGE
+			this.add.sprite(x, y, "imageLevelSelectorBlocked");
+			}
+			else
+			{
+			// ADDING THE LEVEL IMAGE
+			var levelSelectorLevelImage = this.add.sprite(x, y, "imageLevelSelectorLevel");
+
+			// ADDING THE LEVEL LABEL
+			var levelSelectorLevelNumber = game.add.bitmapText(0, 0, "ArialBlackShadow", levelNumber, 20);
+			levelSelectorLevelNumber.position.x = levelSelectorLevelImage.position.x + levelSelectorLevelImage.width / 2 - levelSelectorLevelNumber.width / 2;
+			levelSelectorLevelNumber.position.y = levelSelectorLevelImage.position.y + levelSelectorLevelImage.height / 2 - levelSelectorLevelNumber.height / 2 - 5;
+
+			// ADDING THE LEVEL HANDLER
+			var levelSelectorLevelHandler = game.add.graphics();
+			levelSelectorLevelHandler.beginFill(0x000000, 0);
+			levelSelectorLevelHandler.drawRect(levelSelectorLevelImage.position.x, levelSelectorLevelImage.position.y, levelSelectorLevelImage.width, levelSelectorLevelImage.height, 10);
+			levelSelectorLevelHandler.inputEnabled = true;
+			levelSelectorLevelHandler.events.onInputUp.add(function(){this.startLevel("level" + levelNumber)},this);
+			}
 		},
 
 	startLevel: function(level)
