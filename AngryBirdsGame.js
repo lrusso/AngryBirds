@@ -1330,8 +1330,8 @@ AngryBirds.Game.prototype = {
 		// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
 		game.camera.follow(null);
 
-		// MOVING THE CAMERA TO THE INITIAL POSITION
-		game.camera.x = 0;
+		// MOVING SMOOTHLY THE CAMERA TO THE INITIAL POSITION
+		game.add.tween(game.camera).to({x: 0}, 300, Phaser.Easing.Linear.None, true);
 
 		// BRINGING THE LEFT SIDE OF THE POLE TO THE TOP
 		this.game.world.bringToTop(this.poleLeft);
