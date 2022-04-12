@@ -32,8 +32,8 @@ if (userLanguage.substring(0,2)=="es")
 	{
 	STRING_PLAY = "JUGAR";
 	STRING_PLAYWIDTH = 130;
-	STRING_YOUWIN = String.fromCharCode(161) + "Has ganado!";
-	STRING_YOULOSE = String.fromCharCode(161) + "Has perdido!";
+	STRING_YOUWIN = String.fromCharCode(161) + "HAS GANADO!";
+	STRING_YOULOSE = String.fromCharCode(161) + "HAS PERDIDO!";
 	STRING_DISCLAIMER1 = "DESCARGO DE RESPONSABILIDAD";
 	STRING_DISCLAIMER2 = "Los recursos de Angry Birds";
 	STRING_DISCLAIMER3 = "(im" + String.fromCharCode(225) + "genes, fuentes, m" + String.fromCharCode(250) + "sica y sonidos)";
@@ -48,8 +48,8 @@ if (userLanguage.substring(0,2)=="es")
 	{
 	STRING_PLAY = "PLAY";
 	STRING_PLAYWIDTH = 108;
-	STRING_YOUWIN = "You win!";
-	STRING_YOULOSE = "You lose!"
+	STRING_YOUWIN = "YOU WIN!";
+	STRING_YOULOSE = "YOU LOSE!"
 	STRING_DISCLAIMER1 = "DISCLAIMER";
 	STRING_DISCLAIMER2 = "The Angry Birds resources";
 	STRING_DISCLAIMER3 = "(images, fonts, music and sounds)";
@@ -62,6 +62,7 @@ if (userLanguage.substring(0,2)=="es")
 	}
 
 var GAME_SOUND_ENABLED = true;
+var GAME_LEVEL_SELECTED = "";
 
 var AngryBirds = {};
 
@@ -725,12 +726,15 @@ AngryBirds.LevelSelector.prototype = {
 			levelSelectorLevelHandler.beginFill(0x000000, 0);
 			levelSelectorLevelHandler.drawRect(levelSelectorLevelImage.position.x, levelSelectorLevelImage.position.y, levelSelectorLevelImage.width, levelSelectorLevelImage.height, 10);
 			levelSelectorLevelHandler.inputEnabled = true;
-			levelSelectorLevelHandler.events.onInputUp.add(function(){this.startLevel("level" + levelNumber)},this);
+			levelSelectorLevelHandler.events.onInputUp.add(function(){this.startLevel(levelNumber)},this);
 			}
 		},
 
-	startLevel: function(level)
+	startLevel: function(levelNumber)
 		{
+		// SETTING THE SELECTED LEVEL NUMBER
+		GAME_LEVEL_SELECTED = levelNumber;
+
 		// CHECKING IF THERE IS A MUSIC PLAYER
 		if (game.state.states["AngryBirds.SplashGame"].musicPlayer!=null)
 			{
@@ -747,7 +751,6 @@ AngryBirds.Game = function (game)
 	{
 	this.toastText = null;
 	this.toastShadow = null;
-	this.currentLevel = null;
 	this.MAX_SPEED_SHOOT = null;
 	this.SHOOT_FACTOR = null;
 	this.KILL_DIFF = null;
@@ -810,7 +813,6 @@ AngryBirds.Game.prototype = {
 		{
 		this.toastText = null;
 		this.toastShadow = null;
-		this.currentLevel = "level1";
 		this.MAX_SPEED_SHOOT = 1000;
 		this.SHOOT_FACTOR = 8;
 		this.KILL_DIFF = 8;
@@ -892,17 +894,17 @@ AngryBirds.Game.prototype = {
 		this.blocks.physicsBodyType = Phaser.Physics.P2JS;
 
 		// ADDING THE FLOOR
-		this.floor = this.add.tileSprite(this.game.world.width / 2, this.game.world.height - 24, this.game.world.width * 2, 48, "imageGameFloor");
+		this.floor = this.add.tileSprite(this.game.world.width / 2, this.game.world.height - 24, this.game.world.width * 3, 48, "imageGameFloor");
 		this.blocks.add(this.floor);
 		this.floor.body.setCollisionGroup(this.blocksCollisionGroup);
 		this.floor.body.collides([this.blocksCollisionGroup, this.enemiesCollisionGroup, this.birdsCollisionGroup]);
 		this.floor.body.static = true;
 
 		// ADDING THE FLOOR GRASS BACK LAYER
-		this.floorGrassBack = this.add.tileSprite(-3, this.game.world.height - 65, this.game.world.width * 2, this.game.world.height - 418, "imageGameGrassBack");
+		this.floorGrassBack = this.add.tileSprite(-3, this.game.world.height - 65, this.game.world.width * 3, this.game.world.height - 418, "imageGameGrassBack");
 
 		// ADDING THE FLOOR GRASS FRONT FRONT
-		this.floorGrassFront = this.add.tileSprite(-3, this.game.world.height - 60, this.game.world.width * 2, this.game.world.height - 420, "imageGameGrassFront");
+		this.floorGrassFront = this.add.tileSprite(-3, this.game.world.height - 60, this.game.world.width * 3, this.game.world.height - 420, "imageGameGrassFront");
 
 		// ADDING THE POLE
 		this.pole = this.add.sprite(180, 300, "imageGamePole");
@@ -1217,6 +1219,31 @@ AngryBirds.Game.prototype = {
 				this.throwBird();
 				}
 			}
+
+		// CHECKING IF THE BIRD IS IN MOVEMENT
+		if (this.bird.body!=null)
+			{
+			// CHECKING IF THE BIRD IS NOT MOVING ANYMORE OR IF IT'S OUT OF THE SCREEN
+			if ((Math.abs(this.bird.body.velocity.x) + Math.abs(this.bird.body.velocity.y) < 0.2 && this.bird.alpha==1) || (this.bird.position.x>game.world.width + 30 && this.bird.alpha==1))
+				{
+				// FLAGGING THE BIRD
+				this.bird.alpha = 0.99;
+
+				// WAITING 1000 MS
+				game.time.events.add(1000, function()
+					{
+					// KILLING THE BIRD
+					game.state.states["AngryBirds.Game"].killBird();
+					});
+
+				// WAITING 1500 MS
+				game.time.events.add(1500, function()
+					{
+					// ENDING THE TURN
+					game.state.states["AngryBirds.Game"].endTurn();
+					});
+				}
+			}
 		},
 
 	hitEnemy: function(bodyA, bodyB, shapeA, shapeB, equation)
@@ -1287,7 +1314,7 @@ AngryBirds.Game.prototype = {
 	loadLevel: function()
 		{
 		// LOADING THE LEVEL DATA
-		this.levelData = JSON.parse(this.game.cache.getText(this.currentLevel));
+		this.levelData = JSON.parse(this.game.cache.getText("level" + GAME_LEVEL_SELECTED));
 
 		// LOADING AND CREATING ALL THE BLOCKS AND ENEMIES
 		this.levelData.blocks.forEach(function(block){this.createBlock(block)},this);
@@ -1423,9 +1450,6 @@ AngryBirds.Game.prototype = {
 			// PLAYING THE AUDIO FLY
 			this.audioPlayer.play();
 			}
-
-		// ENDING THE TURN
-		this.endTurn();
 		},
 
 	updateDeadCount: function()
@@ -1470,100 +1494,94 @@ AngryBirds.Game.prototype = {
 			}
 		},
 
+	killBird: function()
+		{
+		// UPDATING THE AVAILABLE BIRDS COUNTER
+		this.availableBirdsCounter = this.availableBirdsCounter - 1;
+
+		// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
+		game.camera.follow(null);
+
+		// HIDING THE EXPLOSION SPRITE
+		this.explosion.visible = false;
+
+		// PLACING THE EXPLOSION SPRITE WHERE ENEMY IS LOCATED
+		this.explosion.position.x = this.bird.position.x - 24;
+		this.explosion.position.y = this.bird.position.y - 24;
+
+		// KILLING THE BIRD
+		this.bird.kill();
+
+		// PLAYING THE EXPLOSION ANIMATION
+		this.explosion.animations.play("explosion", 10, false);
+
+		// SHOWING THE EXPLOSION SPRITE
+		this.explosion.visible = true;
+
+		// CHECKING IF THE SOUND IS ENABLED
+		if (GAME_SOUND_ENABLED==true)
+			{
+			// LOADING THE AUDIO EXPLOSION
+			this.audioPlayer = this.add.audio("audioExplosion");
+
+			// SETTING THE AUDIO EXPLOSION VOLUME
+			this.audioPlayer.volume = 1;
+
+			// SETTING THAT THE AUDIO EXPLOSION WON'T BE LOOPING
+			this.audioPlayer.loop = false;
+
+			// PLAYING THE AUDIO EXPLOSION
+			this.audioPlayer.play();
+			}
+		},
+
 	endTurn: function()
 		{
-		// WAITING 3 SECONDS
-		this.game.time.events.add(3 * Phaser.Timer.SECOND, function()
+		// CHECKING IF THERE ARE BIRDS AVIABLE
+		if (this.availableBirdsCounter > 0)
 			{
-			// UPDATING THE AVAILABLE BIRDS COUNTER
-			this.availableBirdsCounter = this.availableBirdsCounter - 1;
-
-			// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
-			game.camera.follow(null);
-
-			// HIDING THE EXPLOSION SPRITE
-			this.explosion.visible = false;
-
-			// PLACING THE EXPLOSION SPRITE WHERE ENEMY IS LOCATED
-			this.explosion.position.x = this.bird.position.x - 24;
-			this.explosion.position.y = this.bird.position.y - 24;
-
-			// KILLING THE BIRD
-			this.bird.kill();
-
-			// PLAYING THE EXPLOSION ANIMATION
-			this.explosion.animations.play("explosion", 10, false);
-
-			// SHOWING THE EXPLOSION SPRITE
-			this.explosion.visible = true;
-
-			// CHECKING IF THE SOUND IS ENABLED
-			if (GAME_SOUND_ENABLED==true)
+			// CHECKING IF THE USER DIDN'T WIN THE GAME
+			if (this.gameWon==false)
 				{
-				// LOADING THE AUDIO EXPLOSION
-				this.audioPlayer = this.add.audio("audioExplosion");
-
-				// SETTING THE AUDIO EXPLOSION VOLUME
-				this.audioPlayer.volume = 1;
-
-				// SETTING THAT THE AUDIO EXPLOSION WON'T BE LOOPING
-				this.audioPlayer.loop = false;
-
-				// PLAYING THE AUDIO EXPLOSION
-				this.audioPlayer.play();
+				// ADDING A BIRD
+				this.addBird();
 				}
-
-			// SHOWING A NEW BIRD 1 SECOND LATER
-			this.game.time.events.add(Phaser.Timer.SECOND, function()
+			}
+		else
+			{
+			// CHECKING IF THE USER DIDN'T WIN THE GAME
+			if (this.gameWon==false)
 				{
-				// CHECKING IF THERE ARE BIRDS AVIABLE
-				if (this.availableBirdsCounter > 0)
+				// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
+				game.camera.follow(null);
+
+				// SHOWING THE 'YOU LOSE' TOAST
+				this.showToast(STRING_YOULOSE);
+
+				// CHECKING IF THE SOUND IS ENABLED
+				if (GAME_SOUND_ENABLED==true)
 					{
-					// CHECKING IF THE USER DIDN'T WIN THE GAME
-					if (this.gameWon==false)
-						{
-						// ADDING A BIRD
-						this.addBird();
-						}
+					// LOADING THE AUDIO YOU LOSE
+					this.audioPlayer = this.add.audio("audioYouLose");
+
+					// SETTING THE AUDIO YOU LOSE VOLUME
+					this.audioPlayer.volume = 1;
+
+					// SETTING THAT THE AUDIO YOU LOSE WON'T BE LOOPING
+					this.audioPlayer.loop = false;
+
+					// PLAYING THE AUDIO YOU LOSE
+					this.audioPlayer.play();
 					}
-				else
+
+				// WAITING 5000 MS
+				game.time.events.add(5000, function()
 					{
-					// CHECKING IF THE USER DIDN'T WIN THE GAME
-					if (this.gameWon==false)
-						{
-						// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
-						game.camera.follow(null);
-
-						// SHOWING THE 'YOU LOSE' TOAST
-						this.showToast(STRING_YOULOSE);
-
-						// CHECKING IF THE SOUND IS ENABLED
-						if (GAME_SOUND_ENABLED==true)
-							{
-							// LOADING THE AUDIO YOU LOSE
-							this.audioPlayer = this.add.audio("audioYouLose");
-
-							// SETTING THE AUDIO YOU LOSE VOLUME
-							this.audioPlayer.volume = 1;
-
-							// SETTING THAT THE AUDIO YOU LOSE WON'T BE LOOPING
-							this.audioPlayer.loop = false;
-
-							// PLAYING THE AUDIO YOU LOSE
-							this.audioPlayer.play();
-							}
-
-						// WAITING 5000 MS
-						game.time.events.add(5000, function()
-							{
-							// RESTARTING THE GAME
-							game.state.states["AngryBirds.Game"].restartGame();
-							});
-						}
-					}
-				}, this);
-
-			}, this);
+					// RESTARTING THE GAME
+					game.state.states["AngryBirds.Game"].restartGame();
+					});
+				}
+			}
 		},
 
 	addingZeros: function(number, length)
@@ -1674,11 +1692,11 @@ AngryBirds.Game.prototype = {
 		this.toastText = game.add.bitmapText(0, 0, "ArialBlackShadow", myText, 20.5);
 		this.toastText.height = 24.5;
 		this.toastText.position.x = game.width / 2 - this.toastText.width / 2;
-		this.toastText.position.y = game.height - this.toastText.height - 18;
+		this.toastText.position.y = game.height - this.toastText.height - 7;
 		this.toastText.fixedToCamera = true;
 
 		// DRAWING THE TOAST SHADOW
-		this.toastShadow.drawRoundedRect(game.width / 2 - this.toastText.width / 2 - 10, game.height - 52, this.toastText.width + 20, 42, 10);
+		this.toastShadow.drawRoundedRect(game.width / 2 - this.toastText.width / 2 - 10, game.height - 43, this.toastText.width + 20, 43, 10);
 		}
 	};
 
