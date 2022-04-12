@@ -1086,6 +1086,13 @@ AngryBirds.Game.prototype = {
 			// PLAYING THE INTRO MUSIC
 			this.musicPlayer.play();
 			}
+
+		// WAITING 200 MS
+		game.time.events.add(200, function()
+			{
+			// PAUSING THE PHYSICS
+			game.physics.p2.pause();
+			});
 		},
 
 	update: function()
@@ -1414,6 +1421,9 @@ AngryBirds.Game.prototype = {
 			// DESTROYING THE SECOND LINE FOR THE POLE
 			this.poleLine2.destroy();
 			}
+
+		// RESUMING THE PHYSICS
+		game.physics.p2.resume();
 
 		// ENABLING PHYSICS TO THE BIRD
 		this.game.physics.p2.enable(this.bird);
