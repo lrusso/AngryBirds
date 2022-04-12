@@ -699,9 +699,9 @@ AngryBirds.LevelSelector.prototype = {
 			var levelSelectorLevelImage = this.add.sprite(x, y, "imageLevelSelectorLevel");
 
 			// ADDING THE LEVEL LABEL
-			var levelSelectorLevelNumber = game.add.bitmapText(0, 0, "ArialBlackShadow", levelNumber, 20);
+			var levelSelectorLevelNumber = game.add.bitmapText(0, 0, "AngryBirdsFont", levelNumber, 35);
 			levelSelectorLevelNumber.position.x = levelSelectorLevelImage.position.x + levelSelectorLevelImage.width / 2 - levelSelectorLevelNumber.width / 2;
-			levelSelectorLevelNumber.position.y = levelSelectorLevelImage.position.y + levelSelectorLevelImage.height / 2 - levelSelectorLevelNumber.height / 2 - 5;
+			levelSelectorLevelNumber.position.y = levelSelectorLevelImage.position.y + levelSelectorLevelImage.height / 2 - levelSelectorLevelNumber.height / 2 - 13;
 
 			// ADDING THE LEVEL HANDLER
 			var levelSelectorLevelHandler = game.add.graphics();
