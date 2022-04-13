@@ -802,14 +802,18 @@ AngryBirds.EpisodeIntro.prototype = {
 				game.state.states["AngryBirds.EpisodeIntro"].musicPlayer.play();
 				}
 
-			// MOVING SMOOTHLY THE CAMERA TO THE END OF THE IMAGE
-			game.add.tween(game.state.states["AngryBirds.EpisodeIntro"].imageSplash.position).to({x: -(game.state.states["AngryBirds.EpisodeIntro"].imageSplash.width - game.width)}, 14000, Phaser.Easing.Linear.None, true).onComplete.add(function()
+			// WAITING 2000 MS
+			game.time.events.add(2000, function()
 				{
-				// WAITING 1000 MS
-				game.time.events.add(1000, function()
+				// MOVING SMOOTHLY THE CAMERA TO THE END OF THE IMAGE
+				game.add.tween(game.state.states["AngryBirds.EpisodeIntro"].imageSplash.position).to({x: -(game.state.states["AngryBirds.EpisodeIntro"].imageSplash.width - game.width)}, 12000, Phaser.Easing.Linear.None, true).onComplete.add(function()
 					{
-					// LOADING THE GAME WHEN THE ANIMATION IT'S DONE
-					game.state.start("AngryBirds.Game", Phaser.Plugin.StateTransition.Out.SlideLeft);
+					// WAITING 1000 MS
+					game.time.events.add(1000, function()
+						{
+						// LOADING THE GAME WHEN THE ANIMATION IT'S DONE
+						game.state.start("AngryBirds.Game", Phaser.Plugin.StateTransition.Out.SlideLeft);
+						});
 					});
 				});
 			});
