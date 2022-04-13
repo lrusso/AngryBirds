@@ -1008,41 +1008,7 @@ AngryBirds.Game.prototype = {
 		this.menuHandler.drawRect(5, 5, 60, 60, 10);
 		this.menuHandler.fixedToCamera = true;
 		this.menuHandler.inputEnabled = true;
-		this.menuHandler.events.onInputUp.add(function()
-			{
-			// CHECKING IF THERE IS AN AUDIO PLAYER CREATED
-			if (this.audioPlayer!=null)
-				{
-				// PAUSING THE AUDIO PLAYER
-				this.audioPlayer.pause();
-				}
-
-			// CHECKING IF THERE IS A MUSIC PLAYER CREATED
-			if (this.musicPlayer!=null)
-				{
-				// PAUSING THE MUSIC PLAYER
-				this.musicPlayer.pause();
-				}
-
-			// CHECKING IF THE SOUND IS ENABLED
-			if (GAME_SOUND_ENABLED==true)
-				{
-				// LOADING THE INTRO MUSIC
-				game.state.states["AngryBirds.SplashGame"].musicPlayer = game.state.states["AngryBirds.SplashGame"].add.audio("audioIntro");
-
-				// SETTING THE INTRO MUSIC VOLUME
-				game.state.states["AngryBirds.SplashGame"].musicPlayer.volume = 1;
-
-				// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
-				game.state.states["AngryBirds.SplashGame"].musicPlayer.loop = true;
-
-				// PLAYING THE INTRO MUSIC
-				game.state.states["AngryBirds.SplashGame"].musicPlayer.play();
-				}
-
-			// LOADING THE LEVEL SELECTOR
-			game.state.start("AngryBirds.LevelSelector", Phaser.Plugin.StateTransition.Out.SlideRight);
-			},this);
+		this.menuHandler.events.onInputUp.add(function(){this.goBackToLevelSelector()},this);
 
 		// ADDING THE RESTART ICON
 		this.restartIcon = this.add.sprite(70, 5, "imageGameRestart");
@@ -1648,8 +1614,8 @@ AngryBirds.Game.prototype = {
 					}
 					else
 					{
-					// LOADING THE LEVEL SELECTOR
-					game.state.start("AngryBirds.LevelSelector", Phaser.Plugin.StateTransition.Out.SlideLeft);
+					// GOING BACK TO THE LEVEL SELECTOR
+					game.state.states["AngryBirds.Game"].goBackToLevelSelector();
 					}
 				});
 			}
@@ -1835,6 +1801,42 @@ AngryBirds.Game.prototype = {
 
 		// RETURNING IF THE NEXT LEVEL EXISTS
 		return game.cache.checkTextKey(nextLevel);
+		},
+
+	goBackToLevelSelector: function()
+		{
+		// CHECKING IF THERE IS AN AUDIO PLAYER CREATED
+		if (this.audioPlayer!=null)
+			{
+			// PAUSING THE AUDIO PLAYER
+			this.audioPlayer.pause();
+			}
+
+		// CHECKING IF THERE IS A MUSIC PLAYER CREATED
+		if (this.musicPlayer!=null)
+			{
+			// PAUSING THE MUSIC PLAYER
+			this.musicPlayer.pause();
+			}
+
+		// CHECKING IF THE SOUND IS ENABLED
+		if (GAME_SOUND_ENABLED==true)
+			{
+			// LOADING THE INTRO MUSIC
+			game.state.states["AngryBirds.SplashGame"].musicPlayer = game.state.states["AngryBirds.SplashGame"].add.audio("audioIntro");
+
+			// SETTING THE INTRO MUSIC VOLUME
+			game.state.states["AngryBirds.SplashGame"].musicPlayer.volume = 1;
+
+			// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
+			game.state.states["AngryBirds.SplashGame"].musicPlayer.loop = true;
+
+			// PLAYING THE INTRO MUSIC
+			game.state.states["AngryBirds.SplashGame"].musicPlayer.play();
+			}
+
+		// LOADING THE LEVEL SELECTOR
+		game.state.start("AngryBirds.LevelSelector", Phaser.Plugin.StateTransition.Out.SlideRight);
 		},
 
 	setBooleanSetting: function(settingName, settingValue)
