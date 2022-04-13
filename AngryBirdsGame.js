@@ -792,6 +792,7 @@ AngryBirds.Game = function (game)
 	this.restartHandler = null;
 	this.soundIcon = null;
 	this.soundHandler = null;
+	this.turnInProgress = null;
 
 	// SCALING THE CANVAS SIZE FOR THE GAME
 	function resizeF()
@@ -854,6 +855,7 @@ AngryBirds.Game.prototype = {
 		this.restartHandler = null;
 		this.soundIcon = null;
 		this.soundHandler = null;
+		this.turnInProgress = false;
 		},
 
 	create: function()
@@ -1229,6 +1231,31 @@ AngryBirds.Game.prototype = {
 				}
 			}
 
+		// CREATING A VARIABLE TO KNOW IF THE GAME IS MOTION
+		var gameInMotion = false;
+
+		// LOOPING ALL THE ENEMIES
+		for (var i=0;i<this.enemies.children.length;i++)
+			{
+			// CHECKING IF THE ENEMY IS IN MOVEMENT AND THAT WASN'T KILLED
+			if (Math.abs(this.enemies.children[i].body.velocity.x) + Math.abs(this.enemies.children[i].body.velocity.y) > 0.8 && this.enemies.children[i].alpha==1)
+				{
+				// SETTING THAT THE GAME IS MOTION
+				gameInMotion = true;
+				}
+			}
+
+		// LOOPING ALL THE BLOCKS
+		for (var i=0;i<this.blocks.children.length;i++)
+			{
+			// CHECKING IF THE BLOCK IS IN MOVEMENT
+			if (Math.abs(this.blocks.children[i].body.velocity.x) + Math.abs(this.blocks.children[i].body.velocity.y) > 0.8)
+				{
+				// SETTING THAT THE GAME IS MOTION
+				gameInMotion = true;
+				}
+			}
+
 		// CHECKING IF THE BIRD IS IN MOVEMENT
 		if (this.bird.body!=null)
 			{
@@ -1244,14 +1271,24 @@ AngryBirds.Game.prototype = {
 					// KILLING THE BIRD
 					game.state.states["AngryBirds.Game"].killBird();
 					});
-
-				// WAITING 1500 MS
-				game.time.events.add(1500, function()
-					{
-					// ENDING THE TURN
-					game.state.states["AngryBirds.Game"].endTurn();
-					});
 				}
+			}
+
+		// CHECKING IF THE GAME IS NOT IN MOTION, THAT THE BIRD WAS ALREADY KILLED AND THAT THE TURN IS IN PROGRESS
+		if (gameInMotion==false && this.bird.alpha<1 && this.turnInProgress==true)
+			{
+			// SETTING THAT THE GAME IS NO LONGER IN PROGRESS
+			this.turnInProgress = false;
+
+			// PAUSING THE PHYSICS
+			game.physics.p2.pause();
+
+			// WAITING 1000 MS
+			game.time.events.add(1000, function()
+				{
+				// ENDING THE TURN
+				game.state.states["AngryBirds.Game"].endTurn();
+				});
 			}
 		},
 
@@ -1269,6 +1306,8 @@ AngryBirds.Game.prototype = {
 			// PLACING THE EXPLOSION SPRITE WHERE ENEMY IS LOCATED
 			game.state.states["AngryBirds.Game"].explosion.position.x = this.position.x - 24;
 			game.state.states["AngryBirds.Game"].explosion.position.y = this.position.y - 24;
+
+			this.alpha = 0.99;
 
 			// KILLING THE ENEMY
 			this.kill();
@@ -1424,6 +1463,9 @@ AngryBirds.Game.prototype = {
 
 		// RESUMING THE PHYSICS
 		game.physics.p2.resume();
+
+		// SETTING THAT THE TURN IS IN PROGRESS
+		this.turnInProgress = true;
 
 		// ENABLING PHYSICS TO THE BIRD
 		this.game.physics.p2.enable(this.bird);
