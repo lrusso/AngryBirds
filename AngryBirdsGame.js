@@ -1307,6 +1307,7 @@ AngryBirds.Game.prototype = {
 			game.state.states["AngryBirds.Game"].explosion.position.x = this.position.x - 24;
 			game.state.states["AngryBirds.Game"].explosion.position.y = this.position.y - 24;
 
+			// FLAGGING THE ENEMY
 			this.alpha = 0.99;
 
 			// KILLING THE ENEMY
