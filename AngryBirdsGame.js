@@ -62,7 +62,7 @@ if (userLanguage.substring(0,2)=="es")
 	}
 
 var GAME_SOUND_ENABLED = true;
-var GAME_LEVEL_SELECTED = "";
+var GAME_LEVEL_SELECTED = "1";
 
 var AngryBirds = {};
 
@@ -781,7 +781,6 @@ AngryBirds.Game = function (game)
 	this.gameWon = null;
 	this.startX = null;
 	this.swipeCheckingEnabled = null;
-	this.explosion = null;
 	this.musicPlayer = null;
 	this.audioPlayer = null;
 	this.menuIcon = null;
@@ -844,7 +843,6 @@ AngryBirds.Game.prototype = {
 		this.gameWon = false;
 		this.startX = 0;
 		this.swipeCheckingEnabled = false;
-		this.explosion = null;
 		this.musicPlayer = null;
 		this.audioPlayer = null;
 		this.menuIcon = null;
@@ -918,16 +916,6 @@ AngryBirds.Game.prototype = {
 		this.poleLeft = this.add.sprite(166, 291, "imageGamePoleLeft");
 		this.poleLeft.width = this.poleLeft.width * 0.5;
 		this.poleLeft.height = this.poleLeft.height * 0.5;
-
-		// ADDING THE EXPLOSION SPRITE
-		this.explosion = game.add.sprite(420, 307, "imageGameExplosion");
-		this.explosionAnimation = this.explosion.animations.add("explosion", [0, 1, 2, 3, 4]);
-		this.explosionAnimation.onComplete.add(function()
-			{
-			// HIDING THE EXPLOSION SPRITE
-			this.explosion.visible = false;
-			}, this);
-		this.explosion.visible = false;
 
 		// ADDING THE MENU ICON
 		this.menuIcon = this.add.sprite(5, 5, "imageGameMenu");
@@ -1309,12 +1297,9 @@ AngryBirds.Game.prototype = {
 		// CHECKING IF THE VELOCITY IS ENOUGH TO KILL THE ENEMY
 		if (velocityDiff > game.state.states["AngryBirds.Game"].KILL_DIFF)
 			{
-			// HIDING THE EXPLOSION SPRITE
-			game.state.states["AngryBirds.Game"].explosion.visible = false;
-
 			// PLACING THE EXPLOSION SPRITE WHERE ENEMY IS LOCATED
-			game.state.states["AngryBirds.Game"].explosion.position.x = this.position.x - 24;
-			game.state.states["AngryBirds.Game"].explosion.position.y = this.position.y - 24;
+			this.explosion.position.x = this.position.x - 24;
+			this.explosion.position.y = this.position.y - 24;
 
 			// FLAGGING THE ENEMY
 			this.alpha = 0.99;
@@ -1323,10 +1308,10 @@ AngryBirds.Game.prototype = {
 			this.kill();
 
 			// PLAYING THE EXPLOSION ANIMATION
-			game.state.states["AngryBirds.Game"].explosion.animations.play("explosion", 10, false);
+			this.explosion.animations.play("explosion", 10, false);
 
 			// SHOWING THE EXPLOSION SPRITE
-			game.state.states["AngryBirds.Game"].explosion.visible = true;
+			this.explosion.visible = true;
 
 			// CHECKING IF THE SOUND IS ENABLED
 			if (GAME_SOUND_ENABLED==true)
@@ -1422,6 +1407,16 @@ AngryBirds.Game.prototype = {
 		// CALLING THE HITENEMY FUNCTION WHEN ENEMIES HIT SOMETHING
 		enemy.body.onBeginContact.add(this.hitEnemy, enemy);
 
+		// ADDING THE EXPLOSION SPRITE
+		enemy.explosion = game.add.sprite(420, 307, "imageGameExplosion");
+		enemy.explosionAnimation = enemy.explosion.animations.add("explosion", [0, 1, 2, 3, 4]);
+		enemy.explosionAnimation.onComplete.add(function()
+			{
+			// HIDING THE EXPLOSION SPRITE
+			enemy.explosion.visible = false;
+			}, enemy);
+		enemy.explosion.visible = false;
+
 		// RETURNING THE ENEMY
 		return enemy;
 		},
@@ -1431,6 +1426,19 @@ AngryBirds.Game.prototype = {
 		// ADDING A BIRD TO THE STARTING POSITION
 		this.bird = this.add.sprite(this.pole.x, this.pole.y, "imageGameBird");
 		this.bird.anchor.setTo(0.5);
+
+		// CREATING A REFERENCE TO THE CURRENT BIRD
+		var _this = this.bird;
+
+		// ADDING THE EXPLOSION SPRITE
+		this.bird.explosion = game.add.sprite(420, 307, "imageGameExplosion");
+		this.bird.explosionAnimation = this.bird.explosion.animations.add("explosion", [0, 1, 2, 3, 4]);
+		this.bird.explosionAnimation.onComplete.add(function()
+			{
+			// HIDING THE EXPLOSION SPRITE
+			_this.explosion.visible = false;
+			}, _this);
+		this.bird.explosion.visible = false;
 
 		// SETTING THAT THE BIRD IS READY
 		this.isBirdReady = true;
@@ -1566,21 +1574,18 @@ AngryBirds.Game.prototype = {
 		// MAKING THE CAMERA TO NOT FOLLOW THE BIRD
 		game.camera.follow(null);
 
-		// HIDING THE EXPLOSION SPRITE
-		this.explosion.visible = false;
-
 		// PLACING THE EXPLOSION SPRITE WHERE ENEMY IS LOCATED
-		this.explosion.position.x = this.bird.position.x - 24;
-		this.explosion.position.y = this.bird.position.y - 24;
+		this.bird.explosion.position.x = this.bird.position.x - 24;
+		this.bird.explosion.position.y = this.bird.position.y - 24;
 
 		// KILLING THE BIRD
 		this.bird.kill();
 
 		// PLAYING THE EXPLOSION ANIMATION
-		this.explosion.animations.play("explosion", 10, false);
+		this.bird.explosion.animations.play("explosion", 10, false);
 
 		// SHOWING THE EXPLOSION SPRITE
-		this.explosion.visible = true;
+		this.bird.explosion.visible = true;
 
 		// FLAGGING THE BIRD AFTER THE EXPLOSION
 		this.bird.alpha = 0.49;
