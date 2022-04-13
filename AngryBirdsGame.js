@@ -812,7 +812,6 @@ AngryBirds.EpisodeIntro.prototype = {
 			// LOADING THE GAME
 			game.state.start("AngryBirds.Game", Phaser.Plugin.StateTransition.Out.SlideLeft);
 			});
-
 		},
 	};
 
