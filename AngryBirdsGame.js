@@ -1640,7 +1640,7 @@ AngryBirds.Game.prototype = {
 			// WAITING 5000 MS
 			game.time.events.add(5000, function()
 				{
-				// CHECKING IF THE NEW LEVEL EXISTS
+				// CHECKING IF THE NEXT LEVEL EXISTS
 				if (game.state.states["AngryBirds.Game"].nextLevelExists()==true)
 					{
 					// RESTARTING THE GAME
@@ -1830,10 +1830,10 @@ AngryBirds.Game.prototype = {
 
 	nextLevelExists: function()
 		{
-		// GETTING THE NEW LEVEL KEY
+		// GETTING THE NEXT LEVEL KEY
 		var nextLevel = "level" + (parseInt(GAME_LEVEL_SELECTED) + 1);
 
-		// RETURNING IF THE NEW LEVEL EXISTS
+		// RETURNING IF THE NEXT LEVEL EXISTS
 		return game.cache.checkTextKey(nextLevel);
 		},
 
