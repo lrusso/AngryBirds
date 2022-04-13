@@ -811,6 +811,13 @@ AngryBirds.EpisodeIntro.prototype = {
 					// WAITING 1000 MS
 					game.time.events.add(1000, function()
 						{
+						// CHECKING IF THERE IS A EPISODE INTRO MUSIC PLAYER
+						if (game.state.states["AngryBirds.EpisodeIntro"].musicPlayer!=null)
+							{
+							// STOPPING THE EPISODE INTRO MUSIC PLAYER
+							game.state.states["AngryBirds.EpisodeIntro"].musicPlayer.stop();
+							}
+
 						// LOADING THE GAME WHEN THE ANIMATION IT'S DONE
 						game.state.start("AngryBirds.Game", Phaser.Plugin.StateTransition.Out.SlideLeft);
 						});
