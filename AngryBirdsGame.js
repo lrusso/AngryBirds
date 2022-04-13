@@ -1640,8 +1640,17 @@ AngryBirds.Game.prototype = {
 			// WAITING 5000 MS
 			game.time.events.add(5000, function()
 				{
-				// RESTARTING THE GAME
-				game.state.states["AngryBirds.Game"].restartGame();
+				// CHECKING IF THE NEW LEVEL EXISTS
+				if (game.state.states["AngryBirds.Game"].nextLevelExists()==true)
+					{
+					// RESTARTING THE GAME
+					game.state.states["AngryBirds.Game"].restartGame();
+					}
+					else
+					{
+					// LOADING THE LEVEL SELECTOR
+					game.state.start("AngryBirds.LevelSelector", Phaser.Plugin.StateTransition.Out.SlideLeft);
+					}
 				});
 			}
 		},
@@ -1817,6 +1826,15 @@ AngryBirds.Game.prototype = {
 			// PLAYING THE INTRO MUSIC
 			this.musicPlayer.play();
 			}
+		},
+
+	nextLevelExists: function()
+		{
+		// GETTING THE NEW LEVEL KEY
+		var nextLevel = "level" + (parseInt(GAME_LEVEL_SELECTED) + 1);
+
+		// RETURNING IF THE NEW LEVEL EXISTS
+		return game.cache.checkTextKey(nextLevel);
 		},
 
 	setBooleanSetting: function(settingName, settingValue)
