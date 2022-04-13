@@ -1275,7 +1275,7 @@ AngryBirds.Game.prototype = {
 			}
 
 		// CHECKING IF THE GAME IS NOT IN MOTION, THAT THE BIRD WAS ALREADY KILLED AND THAT THE TURN IS IN PROGRESS
-		if (gameInMotion==false && this.bird.alpha<1 && this.turnInProgress==true)
+		if (gameInMotion==false && this.bird.alpha<0.5 && this.turnInProgress==true)
 			{
 			// SETTING THAT THE GAME IS NO LONGER IN PROGRESS
 			this.turnInProgress = false;
@@ -1572,6 +1572,9 @@ AngryBirds.Game.prototype = {
 
 		// SHOWING THE EXPLOSION SPRITE
 		this.explosion.visible = true;
+
+		// FLAGGING THE BIRD AFTER THE EXPLOSION
+		this.bird.alpha = 0.49;
 
 		// CHECKING IF THE SOUND IS ENABLED
 		if (GAME_SOUND_ENABLED==true)
