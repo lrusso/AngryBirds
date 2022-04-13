@@ -1614,6 +1614,10 @@ AngryBirds.Game.prototype = {
 					}
 					else
 					{
+					// REMOVING THE TOAST MESSAGE
+					game.state.states["AngryBirds.Game"].toastShadow.destroy();
+					game.state.states["AngryBirds.Game"].toastText.destroy();
+
 					// GOING BACK TO THE LEVEL SELECTOR
 					game.state.states["AngryBirds.Game"].goBackToLevelSelector();
 					}
