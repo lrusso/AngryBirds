@@ -1946,18 +1946,26 @@ AngryBirds.Game.prototype = {
 		{
 		// CREATING THE TOAST SHADOW
 		this.toastShadow = game.add.graphics();
-		this.toastShadow.beginFill(0x000000, 0.75);
+		this.toastShadow.beginFill(0x000000, 0.6);
 		this.toastShadow.fixedToCamera = true;
+		this.toastShadow.alpha = 0;
 
 		// CREATING THE TOAST TEXT
 		this.toastText = game.add.bitmapText(0, 0, "ArialBlackShadow", myText, 20.5);
 		this.toastText.height = 24.5;
 		this.toastText.position.x = game.width / 2 - this.toastText.width / 2;
-		this.toastText.position.y = game.height - this.toastText.height - 7;
+		this.toastText.position.y = game.height - this.toastText.height - 392;
 		this.toastText.fixedToCamera = true;
+		this.toastText.alpha = 0;
 
 		// DRAWING THE TOAST SHADOW
-		this.toastShadow.drawRoundedRect(game.width / 2 - this.toastText.width / 2 - 10, game.height - 43, this.toastText.width + 20, 43, 10);
+		this.toastShadow.drawRoundedRect(game.width / 2 - this.toastText.width / 2 - 10, game.height - 428, this.toastText.width + 20, 43, 10);
+
+		// FADING IN THE TOAST SHADOW
+		game.add.tween(this.toastShadow).to({alpha: 1}, 300, Phaser.Easing.Linear.None, true);
+
+		// FADING IN THE TOAST TEST
+		game.add.tween(this.toastText).to({alpha: 1}, 300, Phaser.Easing.Linear.None, true);
 		}
 	};
 
