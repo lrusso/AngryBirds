@@ -788,8 +788,9 @@ AngryBirds.LevelSelector.prototype = {
 			// ADDING THREE STARS BECAUSE IT'S A SOLVED LEVEL
 			if (levelNumber<=solvedLevels)
 				{
+				// ADDING THE THREE STARS IMAGE
 				var levelSelectorLevelCompleted = this.add.sprite(x, y, "imageLevelSelectorCompleted");
-				levelSelectorLevelCompleted.position.x = levelSelectorLevelImage.position.x + levelSelectorLevelImage.width / 2 - levelSelectorLevelCompleted.width / 2;
+				levelSelectorLevelCompleted.position.x = levelSelectorLevelImage.position.x + levelSelectorLevelImage.width / 2 - levelSelectorLevelCompleted.width / 2 - 1;
 				levelSelectorLevelCompleted.position.y = levelSelectorLevelImage.position.y + levelSelectorLevelImage.height - levelSelectorLevelCompleted.height - 1;
 				}
 			}
