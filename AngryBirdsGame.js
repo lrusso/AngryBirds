@@ -1204,14 +1204,14 @@ AngryBirds.Game.prototype = {
 				}
 
 			// CHECKING IF THE X POINTER VALUE IS BEFORE THE POLE
-			if (this.game.input.activePointer.position.x<maxX)
+			if (this.game.input.activePointer.position.x+game.camera.x<maxX)
 				{
 				// USING THE X POINTER VALUE
-				currentX = this.game.input.activePointer.position.x;
+				currentX = this.game.input.activePointer.position.x + game.camera.x;
 				}
 
 			// CHECKING IF THE X POINTER VALUE IS OFF THE SCREEN
-			if (this.game.input.activePointer.position.x<minX)
+			if (this.game.input.activePointer.position.x+game.camera.x<minX)
 				{
 				// USING THE X POINTER VALUE
 				currentX = minX;
