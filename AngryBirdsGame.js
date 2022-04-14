@@ -32,8 +32,8 @@ if (userLanguage.substring(0,2)=="es")
 	{
 	STRING_PLAY = "JUGAR";
 	STRING_PLAYWIDTH = 130;
-	STRING_YOUWIN = String.fromCharCode(161) + "HAS GANADO!";
-	STRING_YOULOSE = String.fromCharCode(161) + "HAS PERDIDO!";
+	STRING_YOUWIN = String.fromCharCode(161) + "BIEN HECHO!";
+	STRING_YOULOSE = String.fromCharCode(161) + "Int" + String.fromCharCode(233) + "ntalo de nuevo!";
 	STRING_DISCLAIMER1 = "DESCARGO DE RESPONSABILIDAD";
 	STRING_DISCLAIMER2 = "Los recursos de Angry Birds";
 	STRING_DISCLAIMER3 = "(im" + String.fromCharCode(225) + "genes, fuentes, m" + String.fromCharCode(250) + "sica y sonidos)";
@@ -48,8 +48,8 @@ if (userLanguage.substring(0,2)=="es")
 	{
 	STRING_PLAY = "PLAY";
 	STRING_PLAYWIDTH = 108;
-	STRING_YOUWIN = "YOU WIN!";
-	STRING_YOULOSE = "YOU LOSE!"
+	STRING_YOUWIN = "WELL DONE!";
+	STRING_YOULOSE = "Try it again!"
 	STRING_DISCLAIMER1 = "DISCLAIMER";
 	STRING_DISCLAIMER2 = "The Angry Birds resources";
 	STRING_DISCLAIMER3 = "(images, fonts, music and sounds)";
