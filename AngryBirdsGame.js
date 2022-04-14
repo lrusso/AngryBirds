@@ -63,6 +63,7 @@ if (userLanguage.substring(0,2)=="es")
 
 var GAME_SOUND_ENABLED = true;
 var GAME_LEVEL_SELECTED = "";
+var GAME_MUSIC_PLAYER = "";
 
 var AngryBirds = {};
 
@@ -370,7 +371,7 @@ AngryBirds.SplashGame.prototype = {
 	preload: function()
 		{
 		this.imageSplash = null;
-		this.musicPlayer = this.add.audio("audioIntro");
+		this.musicPlayer = null;
 		},
 
 	create: function()
@@ -380,6 +381,9 @@ AngryBirds.SplashGame.prototype = {
 
 		// SETTING THE BACKGROUND COLOR
 		this.stage.backgroundColor = "#FFFFFF";
+
+		// ADDING THE INTRO MUSIC
+		this.musicPlayer = this.add.audio("audioIntro");
 
 		// ADDING THE IMAGE SPLASH
 		this.imageSplash = game.add.sprite(0, 0, "imageSplash");
@@ -830,13 +834,16 @@ AngryBirds.EpisodeIntro.prototype = {
 	preload: function()
 		{
 		this.imageSplash = null;
-		this.musicPlayer = this.add.audio("audioEpisodeIntro");
+		this.musicPlayer = null;
 		},
 
 	create: function()
 		{
 		// SETTING THE BACKGROUND COLOR
 		this.stage.backgroundColor = "#000000";
+
+		// ADDING THE EPISODE INTRO MUSIC
+		this.musicPlayer = this.add.audio("audioEpisodeIntro");
 
 		// ADDING THE IMAGE SPLASH
 		this.imageSplash = game.add.sprite(0, 0, "imageEpisodeIntro");
