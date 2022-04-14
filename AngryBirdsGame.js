@@ -1003,7 +1003,7 @@ AngryBirds.Game.prototype = {
 		// SETTING THE WORLD BOUNDS
 		game.world.setBounds(0, 0, game.width * 2, game.height);
 
-		// GETTING THE CURRENT FOR LATER USE
+		// GETTING THE CURRENT LEVEL FOR LATER USE
 		this.currentLevel = GAME_LEVEL_SELECTED;
 
 		// STARTING THE PHYSICS SYSTEM
@@ -1449,7 +1449,7 @@ AngryBirds.Game.prototype = {
 
 	restartGame: function(useCurrentLevel)
 		{
-		// CHECKING IF THE LEVEL IS OVER
+		// CHECKING IF THE LEVEL MUST BE RESTARTED
 		if (useCurrentLevel==true)
 			{
 			// RESTORING THE CURRENT LEVEL
