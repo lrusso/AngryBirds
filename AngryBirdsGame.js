@@ -63,7 +63,6 @@ if (userLanguage.substring(0,2)=="es")
 
 var GAME_SOUND_ENABLED = true;
 var GAME_LEVEL_SELECTED = "";
-var GAME_MUSIC_PLAYER = "";
 
 var AngryBirds = {};
 
