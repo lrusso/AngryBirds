@@ -441,6 +441,52 @@ AngryBirds.SplashGame.prototype = {
 			}
 
 		return true;
+		},
+
+	setSolvedLevels: function(newLevel)
+		{
+		try
+			{
+			var name = "solvedlevelsangrybirds";
+			var value = newLevel;
+			var days = 999;
+			var expires = "";
+			if (days)
+				{
+				var date = new Date();
+				date.setTime(date.getTime() + (days*24*60*60*1000));
+				expires = "; expires=" + date.toUTCString();
+				}
+			document.cookie = name + "=" + (value || "")  + expires + "; Secure; path=/";
+			}
+			catch(err)
+			{
+			}
+		},
+
+	getSolvedLevels: function()
+		{
+		try
+			{
+			var name = "solvedlevelsangrybirds";
+			var nameEQ = name + "=";
+			var ca = document.cookie.split(";");
+
+			for(var i=0;i < ca.length;i++)
+				{
+				var c = ca[i];
+				while (c.charAt(0)==" ")
+					{
+					c = c.substring(1,c.length);
+					}
+				if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+				}
+			}
+		catch(err)
+			{
+			}
+
+		return "0";
 		}
 	};
 
@@ -672,26 +718,29 @@ AngryBirds.LevelSelector.prototype = {
 		this.levelSelectorRightImage.position.x = game.width - this.levelSelectorRightImage.width;
 		this.levelSelectorRightImage.position.y = game.height - this.levelSelectorRightImage.height;
 
+		// GETTING ALL THE SOLVED LEVELS
+		var solvedLevels = parseInt(game.state.states["AngryBirds.SplashGame"].getSolvedLevels());
+
 		// ADDING LEVEL BUTTONS FROM 1 TO 5
-		this.createLevelButton(50,   50,  "1", false);
-		this.createLevelButton(200,  50,  "2", true);
-		this.createLevelButton(350,  50,  "3", true);
-		this.createLevelButton(500,  50,  "4", true);
-		this.createLevelButton(650,  50,  "5", true);
+		this.createLevelButton(50,   50,  "1", solvedLevels);
+		this.createLevelButton(200,  50,  "2", solvedLevels);
+		this.createLevelButton(350,  50,  "3", solvedLevels);
+		this.createLevelButton(500,  50,  "4", solvedLevels);
+		this.createLevelButton(650,  50,  "5", solvedLevels);
 
 		// ADDING LEVEL BUTTONS FROM 6 TO 10
-		this.createLevelButton(50,  150,  "6", true);
-		this.createLevelButton(200, 150,  "7", true);
-		this.createLevelButton(350, 150,  "8", true);
-		this.createLevelButton(500, 150,  "9", true);
-		this.createLevelButton(650, 150, "10", true);
+		this.createLevelButton(50,  150,  "6", solvedLevels);
+		this.createLevelButton(200, 150,  "7", solvedLevels);
+		this.createLevelButton(350, 150,  "8", solvedLevels);
+		this.createLevelButton(500, 150,  "9", solvedLevels);
+		this.createLevelButton(650, 150, "10", solvedLevels);
 
 		// ADDING LEVEL BUTTONS FROM 11 TO 15
-		this.createLevelButton(50,  250, "11", true);
-		this.createLevelButton(200, 250, "12", true);
-		this.createLevelButton(350, 250, "13", true);
-		this.createLevelButton(500, 250, "14", true);
-		this.createLevelButton(650, 250, "15", true);
+		this.createLevelButton(50,  250, "11", solvedLevels);
+		this.createLevelButton(200, 250, "12", solvedLevels);
+		this.createLevelButton(350, 250, "13", solvedLevels);
+		this.createLevelButton(500, 250, "14", solvedLevels);
+		this.createLevelButton(650, 250, "15", solvedLevels);
 
 		// ADDING THE GO BACK IMAGE
 		this.levelSelectorGoBackImage = this.add.sprite(10, 370, "imageLevelSelectorGoBack");
@@ -708,10 +757,13 @@ AngryBirds.LevelSelector.prototype = {
 			},this);
 		},
 
-	createLevelButton: function(x, y, levelNumber, levelBlocked)
+	createLevelButton: function(x, y, levelNumber, solvedLevels)
 		{
-		// CHECKING IF THE LEVEL IS BLOCKED
-		if (levelBlocked==true)
+		// GETTING THE CURRENT LEVEL KEY
+		var nextLevel = "level" + (parseInt(levelNumber));
+
+		// CHECKING IF THE LEVEL IS BLOCKED OR DOESN'T EXISTS AS A TEXT KEY
+		if (solvedLevels+1<levelNumber || game.cache.checkTextKey(nextLevel)==false)
 			{
 			// ADDING THE LEVEL BLOCKED IMAGE
 			this.add.sprite(x, y, "imageLevelSelectorBlocked");
@@ -732,6 +784,14 @@ AngryBirds.LevelSelector.prototype = {
 			levelSelectorLevelHandler.drawRect(levelSelectorLevelImage.position.x, levelSelectorLevelImage.position.y, levelSelectorLevelImage.width, levelSelectorLevelImage.height, 10);
 			levelSelectorLevelHandler.inputEnabled = true;
 			levelSelectorLevelHandler.events.onInputUp.add(function(){this.startLevel(levelNumber)},this);
+
+			// ADDING THREE STARS BECAUSE IT'S A SOLVED LEVEL
+			if (levelNumber<=solvedLevels)
+				{
+				var levelSelectorLevelCompleted = this.add.sprite(x, y, "imageLevelSelectorCompleted");
+				levelSelectorLevelCompleted.position.x = levelSelectorLevelImage.position.x + levelSelectorLevelImage.width / 2 - levelSelectorLevelCompleted.width / 2;
+				levelSelectorLevelCompleted.position.y = levelSelectorLevelImage.position.y + levelSelectorLevelImage.height - levelSelectorLevelCompleted.height - 1;
+				}
 			}
 		},
 
@@ -1613,6 +1673,13 @@ AngryBirds.Game.prototype = {
 				// CHECKING IF THE NEXT LEVEL EXISTS
 				if (game.state.states["AngryBirds.Game"].nextLevelExists()==true)
 					{
+					// CHECKING IF THE CURRENT LEVEL AS SOLVED MUST BE SAVED
+					if (parseInt(game.state.states["AngryBirds.SplashGame"].getSolvedLevels())<parseInt(GAME_LEVEL_SELECTED))
+						{
+						// SAVING THE CURRENT LEVEL AS SOLVED
+						game.state.states["AngryBirds.SplashGame"].setSolvedLevels(GAME_LEVEL_SELECTED);
+						}
+
 					// UPDATING THE SELECTED LEVEL NUMBER
 					GAME_LEVEL_SELECTED = "" + (parseInt(GAME_LEVEL_SELECTED) + 1);
 
@@ -1621,6 +1688,9 @@ AngryBirds.Game.prototype = {
 					}
 					else
 					{
+					// SAVING THE CURRENT LEVEL AS SOLVED
+					game.state.states["AngryBirds.SplashGame"].setSolvedLevels(GAME_LEVEL_SELECTED);
+
 					// REMOVING THE TOAST MESSAGE
 					game.state.states["AngryBirds.Game"].toastShadow.destroy();
 					game.state.states["AngryBirds.Game"].toastText.destroy();
