@@ -1309,10 +1309,10 @@ AngryBirds.Game.prototype = {
 				currentX = minX;
 				}
 
-			// CHECKING IF THE BIRD WON'T HIT THE POLE
+			// CHECKING IF THE BIRD WILL OVERLAP THE POLE
 			if (currentX>maxX-18 && currentY>320)
 				{
-				// RELOCATING THE BIRD
+				// RELOCATING THE BIRD TO PREVENT OVERLAPPING
 				currentY = 320;
 				}
 
