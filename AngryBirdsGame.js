@@ -64,6 +64,8 @@ if (userLanguage.substring(0,2)=="es")
 var GAME_SOUND_ENABLED = true;
 var GAME_LEVEL_SELECTED = "";
 
+var MUSIC_PLAYER = null;
+
 var AngryBirds = {};
 
 AngryBirds.Preloader = function(){};
@@ -355,9 +357,63 @@ AngryBirds.Disclaimer.prototype = {
 		// SETTING THAT WILL HAPPEN WHEN THE USER STOPS TOUCHING THE SCREEN OR MOUSE UP
 		this.game.input.onUp.add(function()
 			{
+			// GETTING THE SOUND PREFERENCE
+			GAME_SOUND_ENABLED = this.getBooleanSetting("GAME_SOUND_ENABLED");
+
+			// CHECKING IF THE SOUND IS ENABLED
+			if (GAME_SOUND_ENABLED==true)
+				{
+				// ADDING THE INTRO MUSIC
+				MUSIC_PLAYER = this.add.audio("audioIntro");
+
+				// SETTING THE INTRO MUSIC VOLUME
+				MUSIC_PLAYER.volume = 1;
+
+				// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
+				MUSIC_PLAYER.loop = true;
+
+				// PLAYING THE INTRO MUSIC
+				MUSIC_PLAYER.play();
+				}
+
 			// LOADING THE GAME SPLASH
 			game.state.start("AngryBirds.SplashGame", Phaser.Plugin.StateTransition.Out.SlideLeft);
 			}, this);
+		},
+
+	getBooleanSetting: function(settingName)
+		{
+		try
+			{
+			var name = "angrybirds" + settingName;
+			var nameEQ = name + "=";
+			var ca = document.cookie.split(";");
+
+			for(var i=0;i < ca.length;i++)
+				{
+				var c = ca[i];
+				while (c.charAt(0)==" ")
+					{
+					c = c.substring(1,c.length);
+					}
+				if (c.indexOf(nameEQ) == 0)
+					{
+					if (c.substring(nameEQ.length,c.length)=="true")
+						{
+						return true;
+						}
+						else
+						{
+						return false;
+						}
+					}
+				}
+			}
+		catch(err)
+			{
+			}
+
+		return true;
 		}
 	};
 
@@ -372,35 +428,15 @@ AngryBirds.SplashGame.prototype = {
 	preload: function()
 		{
 		this.imageSplash = null;
-		this.musicPlayer = null;
 		},
 
 	create: function()
 		{
-		// GETTING THE SOUND PREFERENCE
-		GAME_SOUND_ENABLED = this.getBooleanSetting("GAME_SOUND_ENABLED");
-
 		// SETTING THE BACKGROUND COLOR
 		this.stage.backgroundColor = "#FFFFFF";
 
-		// ADDING THE INTRO MUSIC
-		this.musicPlayer = this.add.audio("audioIntro");
-
 		// ADDING THE IMAGE SPLASH
 		this.imageSplash = game.add.sprite(0, 0, "imageSplash");
-
-		// CHECKING IF THE SOUND IS ENABLED
-		if (GAME_SOUND_ENABLED==true)
-			{
-			// SETTING THE INTRO MUSIC VOLUME
-			this.musicPlayer.volume = 1;
-
-			// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
-			this.musicPlayer.loop = true;
-
-			// PLAYING THE INTRO MUSIC
-			this.musicPlayer.play();
-			}
 
 		// WAITING 3000 MS
 		game.time.events.add(3000, function()
@@ -654,10 +690,10 @@ AngryBirds.Menu.prototype = {
 			this.menuSoundIcon.loadTexture("imageMenuSoundOff");
 
 			// CHECKING IF THERE IS A MUSIC PLAYER
-			if (game.state.states["AngryBirds.SplashGame"].musicPlayer!=null)
+			if (MUSIC_PLAYER!=null)
 				{
 				// STOPPING THE INTRO MUSIC
-				game.state.states["AngryBirds.SplashGame"].musicPlayer.stop();
+				MUSIC_PLAYER.stop();
 				}
 			}
 			else
@@ -672,23 +708,23 @@ AngryBirds.Menu.prototype = {
 			this.menuSoundIcon.loadTexture("imageMenuSoundOn")
 
 			// CHECKING IF THE MUSIC PLAYER IS CREATED
-			if (game.state.states["AngryBirds.SplashGame"].musicPlayer!=null)
+			if (MUSIC_PLAYER!=null)
 				{
 				// PAUSING THE BACKGROUND MUSIC
-				game.state.states["AngryBirds.SplashGame"].musicPlayer.pause();
+				MUSIC_PLAYER.pause();
 				}
 
 			// LOADING THE INTRO MUSIC
-			game.state.states["AngryBirds.SplashGame"].musicPlayer = game.state.states["AngryBirds.SplashGame"].add.audio("audioIntro");
+			MUSIC_PLAYER = game.state.states["AngryBirds.SplashGame"].add.audio("audioIntro");
 
 			// SETTING THE INTRO MUSIC VOLUME
-			game.state.states["AngryBirds.SplashGame"].musicPlayer.volume = 1;
+			MUSIC_PLAYER.volume = 1;
 
 			// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
-			game.state.states["AngryBirds.SplashGame"].musicPlayer.loop = true;
+			MUSIC_PLAYER.loop = true;
 
 			// PLAYING THE INTRO MUSIC
-			game.state.states["AngryBirds.SplashGame"].musicPlayer.play();
+			MUSIC_PLAYER.play();
 			}
 		}
 	};
@@ -804,10 +840,10 @@ AngryBirds.LevelSelector.prototype = {
 		GAME_LEVEL_SELECTED = levelNumber;
 
 		// CHECKING IF THERE IS A MUSIC PLAYER
-		if (game.state.states["AngryBirds.SplashGame"].musicPlayer!=null)
+		if (MUSIC_PLAYER!=null)
 			{
 			// STOPPING THE INTRO MUSIC
-			game.state.states["AngryBirds.SplashGame"].musicPlayer.stop();
+			MUSIC_PLAYER.stop();
 			}
 
 		// CHECKING IF THE USER SELECTED THE FIRST LEVEL
@@ -835,7 +871,6 @@ AngryBirds.EpisodeIntro.prototype = {
 	preload: function()
 		{
 		this.imageSplash = null;
-		this.musicPlayer = null;
 		this.buttonNext = null;
 		},
 
@@ -845,7 +880,7 @@ AngryBirds.EpisodeIntro.prototype = {
 		this.stage.backgroundColor = "#000000";
 
 		// ADDING THE EPISODE INTRO MUSIC
-		this.musicPlayer = this.add.audio("audioEpisodeIntro");
+		MUSIC_PLAYER = this.add.audio("audioEpisodeIntro");
 
 		// ADDING THE IMAGE SPLASH
 		this.imageSplash = game.add.sprite(0, 0, "imageEpisodeIntro");
@@ -856,10 +891,10 @@ AngryBirds.EpisodeIntro.prototype = {
 		this.buttonNext.events.onInputUp.add(function()
 			{
 			// CHECKING IF THERE IS A EPISODE INTRO MUSIC PLAYER
-			if (game.state.states["AngryBirds.EpisodeIntro"].musicPlayer!=null)
+			if (MUSIC_PLAYER!=null)
 				{
 				// STOPPING THE EPISODE INTRO MUSIC PLAYER
-				game.state.states["AngryBirds.EpisodeIntro"].musicPlayer.stop();
+				MUSIC_PLAYER.stop();
 				}
 
 			// LOADING THE GAME WHEN THE ANIMATION IT'S DONE
@@ -873,20 +908,20 @@ AngryBirds.EpisodeIntro.prototype = {
 			if (GAME_SOUND_ENABLED==true)
 				{
 				// CHECKING IF THERE IS A MUSIC PLAYER
-				if (game.state.states["AngryBirds.SplashGame"].musicPlayer!=null)
+				if (MUSIC_PLAYER!=null)
 					{
 					// STOPPING THE INTRO MUSIC
-					game.state.states["AngryBirds.SplashGame"].musicPlayer.stop();
+					MUSIC_PLAYER.stop();
 					}
 
 				// SETTING THE EPISODE INTRO MUSIC VOLUME
-				game.state.states["AngryBirds.EpisodeIntro"].musicPlayer.volume = 1;
+				MUSIC_PLAYER.volume = 1;
 
 				// SETTING THAT THE EPISODE INTRO MUSIC WILL BE LOOPING
-				game.state.states["AngryBirds.EpisodeIntro"].musicPlayer.loop = false;
+				MUSIC_PLAYER.loop = false;
 
 				// PLAYING THE EPISODE INTRO MUSIC
-				game.state.states["AngryBirds.EpisodeIntro"].musicPlayer.play();
+				MUSIC_PLAYER.play();
 				}
 
 			// WAITING 2000 MS
@@ -899,10 +934,10 @@ AngryBirds.EpisodeIntro.prototype = {
 					game.time.events.add(1000, function()
 						{
 						// CHECKING IF THERE IS A EPISODE INTRO MUSIC PLAYER
-						if (game.state.states["AngryBirds.EpisodeIntro"].musicPlayer!=null)
+						if (MUSIC_PLAYER!=null)
 							{
 							// STOPPING THE EPISODE INTRO MUSIC PLAYER
-							game.state.states["AngryBirds.EpisodeIntro"].musicPlayer.stop();
+							MUSIC_PLAYER.stop();
 							}
 
 						// LOADING THE GAME WHEN THE ANIMATION IT'S DONE
@@ -948,7 +983,6 @@ AngryBirds.Game = function (game)
 	this.gameWon = null;
 	this.startX = null;
 	this.swipeCheckingEnabled = null;
-	this.musicPlayer = null;
 	this.audioPlayer = null;
 	this.menuIcon = null;
 	this.menuHandler = null;
@@ -1011,7 +1045,6 @@ AngryBirds.Game.prototype = {
 		this.gameWon = false;
 		this.startX = 0;
 		this.swipeCheckingEnabled = false;
-		this.musicPlayer = null;
 		this.audioPlayer = null;
 		this.menuIcon = null;
 		this.menuHandler = null;
@@ -1212,16 +1245,16 @@ AngryBirds.Game.prototype = {
 		if (GAME_SOUND_ENABLED==true)
 			{
 			// LOADING THE INTRO MUSIC
-			this.musicPlayer = this.add.audio("audioBackground");
+			MUSIC_PLAYER = this.add.audio("audioBackground");
 
 			// SETTING THE INTRO MUSIC VOLUME
-			this.musicPlayer.volume = 1;
+			MUSIC_PLAYER.volume = 1;
 
 			// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
-			this.musicPlayer.loop = true;
+			MUSIC_PLAYER.loop = true;
 
 			// PLAYING THE INTRO MUSIC
-			this.musicPlayer.play();
+			MUSIC_PLAYER.play();
 			}
 
 		// WAITING 200 MS
@@ -1502,10 +1535,10 @@ AngryBirds.Game.prototype = {
 			}
 
 		// CHECKING IF THERE IS A MUSIC PLAYER CREATED
-		if (this.musicPlayer!=null)
+		if (MUSIC_PLAYER!=null)
 			{
 			// PAUSING THE MUSIC PLAYER
-			this.musicPlayer.pause();
+			MUSIC_PLAYER.pause();
 			}
 
 		// RESTARTING THE STATE
@@ -1873,10 +1906,10 @@ AngryBirds.Game.prototype = {
 				}
 
 			// CHECKING IF THERE IS A MUSIC PLAYER CREATED
-			if (this.musicPlayer!=null)
+			if (MUSIC_PLAYER!=null)
 				{
 				// PAUSING THE MUSIC PLAYER
-				this.musicPlayer.pause();
+				MUSIC_PLAYER.pause();
 				}
 			}
 			else
@@ -1891,23 +1924,23 @@ AngryBirds.Game.prototype = {
 			this.soundIcon.loadTexture("imageGameSoundOn")
 
 			// CHECKING IF THERE IS A MUSIC PLAYER CREATED
-			if (this.musicPlayer!=null)
+			if (MUSIC_PLAYER!=null)
 				{
 				// PAUSING THE MUSIC PLAYER
-				this.musicPlayer.pause();
+				MUSIC_PLAYER.pause();
 				}
 
 			// LOADING THE INTRO MUSIC
-			this.musicPlayer = this.add.audio("audioBackground");
+			MUSIC_PLAYER = this.add.audio("audioBackground");
 
 			// SETTING THE INTRO MUSIC VOLUME
-			this.musicPlayer.volume = 1;
+			MUSIC_PLAYER.volume = 1;
 
 			// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
-			this.musicPlayer.loop = true;
+			MUSIC_PLAYER.loop = true;
 
 			// PLAYING THE INTRO MUSIC
-			this.musicPlayer.play();
+			MUSIC_PLAYER.play();
 			}
 		},
 
@@ -1930,26 +1963,26 @@ AngryBirds.Game.prototype = {
 			}
 
 		// CHECKING IF THERE IS A MUSIC PLAYER CREATED
-		if (this.musicPlayer!=null)
+		if (MUSIC_PLAYER!=null)
 			{
 			// PAUSING THE MUSIC PLAYER
-			this.musicPlayer.pause();
+			MUSIC_PLAYER.pause();
 			}
 
 		// CHECKING IF THE SOUND IS ENABLED
 		if (GAME_SOUND_ENABLED==true)
 			{
 			// LOADING THE INTRO MUSIC
-			game.state.states["AngryBirds.SplashGame"].musicPlayer = game.state.states["AngryBirds.SplashGame"].add.audio("audioIntro");
+			MUSIC_PLAYER = game.state.states["AngryBirds.SplashGame"].add.audio("audioIntro");
 
 			// SETTING THE INTRO MUSIC VOLUME
-			game.state.states["AngryBirds.SplashGame"].musicPlayer.volume = 1;
+			MUSIC_PLAYER.volume = 1;
 
 			// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
-			game.state.states["AngryBirds.SplashGame"].musicPlayer.loop = true;
+			MUSIC_PLAYER.loop = true;
 
 			// PLAYING THE INTRO MUSIC
-			game.state.states["AngryBirds.SplashGame"].musicPlayer.play();
+			MUSIC_PLAYER.play();
 			}
 
 		// LOADING THE LEVEL SELECTOR
