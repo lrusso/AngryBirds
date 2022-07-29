@@ -1910,6 +1910,9 @@ AngryBirds.Game.prototype = {
 				{
 				// PAUSING THE MUSIC PLAYER
 				MUSIC_PLAYER.pause();
+
+				// DESTROYING THE BACKGROUND MUSIC PLAYER
+				MUSIC_PLAYER.destroy();
 				}
 			}
 			else
@@ -1928,6 +1931,9 @@ AngryBirds.Game.prototype = {
 				{
 				// PAUSING THE MUSIC PLAYER
 				MUSIC_PLAYER.pause();
+
+				// DESTROYING THE BACKGROUND MUSIC PLAYER
+				MUSIC_PLAYER.destroy();
 				}
 
 			// LOADING THE INTRO MUSIC
