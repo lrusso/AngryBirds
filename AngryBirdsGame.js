@@ -358,7 +358,7 @@ AngryBirds.Disclaimer.prototype = {
 		// SETTING THAT WILL HAPPEN WHEN THE USER STARTS TOUCHING THE SCREEN OR MOUSE DOWN
 		this.game.input.onDown.add(function()
 			{
-			// CHECKING IF THERE IS A CLICK TIMESTAMP VALUE
+			// CHECKING IF THERE ISN'T A CLICK TIMESTAMP VALUE
 			if (this.clickTimestamp==null)
 				{
 				// SETTING THE CLICK TIMESTAMP VALUE
