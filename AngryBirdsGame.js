@@ -285,6 +285,8 @@ AngryBirds.Disclaimer.prototype = {
 		this.line8 = null;
 		this.marginY = 20;
 		this.clickTimestamp = null;
+		this.clickPositionX = null;
+		this.clickPositionY = null;
 		},
 
 	create: function()
@@ -363,40 +365,42 @@ AngryBirds.Disclaimer.prototype = {
 				{
 				// SETTING THE CLICK TIMESTAMP VALUE
 				this.clickTimestamp = this.getCurrentTime();
+
+				// SETTING THE INITIAL MOUSE OR FINGER POSITION
+				this.clickPositionX = this.game.input.activePointer.position.x;
+				this.clickPositionY = this.game.input.activePointer.position.y;
 				}
 			}, this);
 
 		// SETTING THAT WILL HAPPEN WHEN THE USER STOPS TOUCHING THE SCREEN OR MOUSE UP
 		this.game.input.onUp.add(function()
 			{
-			// CHECKING IF THE EVENT WAS A CLICK AND NOT A LONG PRESS CLICK - BUGFIX FOR SAFARI ON IOS FOR ENABLING THE AUDIO CONTEXT
-			if (this.getCurrentTime()-this.clickTimestamp<500)
+			// REJECTING ANY SLIDE AND LONG PRESS EVENT - BUGFIX FOR SAFARI ON IOS FOR ENABLING THE AUDIO CONTEXT
+			if (Math.abs(this.game.input.activePointer.position.x-this.clickPositionX)>=25){this.clickTimestamp=null;return;}
+			if (Math.abs(this.game.input.activePointer.position.y-this.clickPositionY)>=25){this.clickTimestamp=null;return;}
+			if (this.getCurrentTime()-this.clickTimestamp>=500){this.clickTimestamp=null;return;}
+
+			// GETTING THE SOUND PREFERENCE
+			GAME_SOUND_ENABLED = this.getBooleanSetting("GAME_SOUND_ENABLED");
+
+			// CHECKING IF THE SOUND IS ENABLED
+			if (GAME_SOUND_ENABLED==true)
 				{
-				// GETTING THE SOUND PREFERENCE
-				GAME_SOUND_ENABLED = this.getBooleanSetting("GAME_SOUND_ENABLED");
+				// ADDING THE INTRO MUSIC
+				MUSIC_PLAYER = this.add.audio("audioIntro");
 
-				// CHECKING IF THE SOUND IS ENABLED
-				if (GAME_SOUND_ENABLED==true)
-					{
-					// ADDING THE INTRO MUSIC
-					MUSIC_PLAYER = this.add.audio("audioIntro");
+				// SETTING THE INTRO MUSIC VOLUME
+				MUSIC_PLAYER.volume = 1;
 
-					// SETTING THE INTRO MUSIC VOLUME
-					MUSIC_PLAYER.volume = 1;
+				// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
+				MUSIC_PLAYER.loop = true;
 
-					// SETTING THAT THE INTRO MUSIC WILL BE LOOPING
-					MUSIC_PLAYER.loop = true;
-
-					// PLAYING THE INTRO MUSIC
-					MUSIC_PLAYER.play();
-					}
-
-				// LOADING THE GAME SPLASH
-				game.state.start("AngryBirds.SplashGame", Phaser.Plugin.StateTransition.Out.SlideLeft);
+				// PLAYING THE INTRO MUSIC
+				MUSIC_PLAYER.play();
 				}
 
-			// CLEARING THE CLICK TIMESTAMP VALUE
-			this.clickTimestamp = null;
+			// LOADING THE GAME SPLASH
+			game.state.start("AngryBirds.SplashGame", Phaser.Plugin.StateTransition.Out.SlideLeft);
 			}, this);
 		},
 
