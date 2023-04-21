@@ -256,14 +256,15 @@ AngryBirds.Splash.prototype = {
 		game.time.events.add(1500, function()
 			{
 			// MOVING THE LOGO INTO THE SCENE
-			this.imageLogoPart2Handler = game.add.tween(game.state.states["AngryBirds.Splash"].imageLogoPart2).to({y: game.height / 2 - game.state.states["AngryBirds.Splash"].imageLogoPart2.height / 2 - logoOffset}, 2000, Phaser.Easing.Quadratic.InOut, true);
-			});
-
-		// WAITING 4750 MS
-		game.time.events.add(4750, function()
-			{
-			// LOADING THE DISCLAIMER
-			game.state.start("AngryBirds.Disclaimer", Phaser.Plugin.StateTransition.Out.SlideLeft);
+			game.add.tween(game.state.states["AngryBirds.Splash"].imageLogoPart2).to({y: game.height / 2 - game.state.states["AngryBirds.Splash"].imageLogoPart2.height / 2 - logoOffset}, 2000, Phaser.Easing.Quadratic.InOut, true).onComplete.add(function()
+				{
+				// WAITING 750 MS
+				game.time.events.add(750, function()
+					{
+					// LOADING THE GAME DISCLAIMER
+					game.state.start("AngryBirds.Disclaimer", Phaser.Plugin.StateTransition.Out.SlideLeft);
+					});
+				});
 			});
 		}
 	};
